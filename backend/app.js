@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+
 const express = require('express');
 
 const app = express();
@@ -18,6 +19,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use('/user', require('./routes/userRoutes'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to chinmay\'s application.' });
