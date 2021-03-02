@@ -56,7 +56,6 @@ groups.hasMany(expenses);
 sequelize.sync()
   .then(() => {
     console.log('databases created ig');
-    users.create({ name: 'user 1', email: 'user1@user1.com', password: 'user1@2021' });
   })
   .catch((err) => {
     console.log(err.sql);

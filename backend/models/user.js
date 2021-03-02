@@ -53,7 +53,13 @@ const users = sequelize.define(
   },
 );
 
-// sequelize.sync();
+sequelize.sync()
+  .then(() => {
+    console.log('user db created');
+  })
+  .catch((err) => {
+    console.log(err.sql);
+  });
 
 module.exports = {
   users,

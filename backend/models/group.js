@@ -38,7 +38,13 @@ const groups = sequelize.define(
   },
 );
 
-// sequelize.sync();
+sequelize.sync()
+  .then(() => {
+    console.log('group db created');
+  })
+  .catch((err) => {
+    console.log(err.sql);
+  });
 
 module.exports = {
   groups,

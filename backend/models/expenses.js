@@ -49,6 +49,14 @@ const expenses = sequelize.define(
   },
 );
 
+sequelize.sync()
+  .then(() => {
+    console.log('expense db created');
+  })
+  .catch((err) => {
+    console.log(err.sql);
+  });
+
 module.exports = {
   expenses,
 };

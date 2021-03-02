@@ -45,6 +45,14 @@ const transactions = sequelize.define(
   },
 );
 
+sequelize.sync()
+  .then(() => {
+    console.log('TX db created');
+  })
+  .catch((err) => {
+    console.log(err.sql);
+  });
+
 module.exports = {
   transactions,
 };
