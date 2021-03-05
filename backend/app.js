@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 const bp = require('body-parser');
@@ -8,6 +9,7 @@ const bp = require('body-parser');
 const db = require('./models/index');
 
 app.use(bp.json());
+app.use(morgan('dev'));
 
 // eslint-disable-next-line consistent-return
 app.use((req, res, next) => {
