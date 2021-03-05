@@ -8,6 +8,8 @@ const bp = require('body-parser');
 
 const db = require('./models/index');
 
+app.use(bp.urlencoded({ extended: false }));
+
 app.use(bp.json());
 app.use(morgan('dev'));
 
