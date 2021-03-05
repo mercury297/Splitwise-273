@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+const { Op } = require('sequelize');
 const { users } = require('../models/index');
 
 // eslint-disable-next-line consistent-return
@@ -15,34 +16,50 @@ const createUser = async (name, email, password) => {
       body: err,
     };
   }
-
-  // .then((result) => {
-  //   console.log('user created: ', result);
-  //   return {
-  //     statusCode: 201,
-  //     body: result,
-  //   };
-  // })
-  // .catch((err) => {
-  // //   console.log(err);
-  //   console.log('Some error for user creation. Mostly validation');
-  //   //   const responseArray = [err, 500];
-  //   return {
-  //     statusCode: 500,
-  //     body: err,
-  //   };
-  // });
 };
 
 // eslint-disable-next-line consistent-return
-const getUser = (userID) => {
+const getUser = async (userID) => {
   try {
-    users.findByPk(userID)
-      .then((user) => user);
+    const userObject = await users.findByPk(userID);
+    return {
+      statusCode: 200,
+      body: userObject,
+    };
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log('User data fetching error : ', err);
-    return 'Error. Could not find user';
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
+const getUserByCreds = async (email, password) => {
+  try {
+    const userObject = await users.findOne({
+      where: {
+        [Op.and]: [
+          { email },
+          { password },
+        ],
+      },
+    });
+    if (userObject !== undefined) {
+      return {
+        statusCode: 200,
+        body: userObject,
+      };
+    }
+
+    return {
+      statusCode: 404,
+      body: 'User not found',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
   }
 };
 
@@ -66,8 +83,15 @@ const updateUser = (userID, updateData) => {
   }
 };
 
+// createUser('Yash', 'Yash@1.com', 'Yash@1');
+// const getOutput = async () => {
+//   const output = await getUserByCreds('Yash@1.com', 'Yash@1');
+//   console.log('get :', output.body.dataValues);
+// };
+
 module.exports = {
   createUser,
   getUser,
   updateUser,
+  getUserByCreds,
 };

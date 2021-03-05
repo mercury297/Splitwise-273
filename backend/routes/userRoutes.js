@@ -1,5 +1,7 @@
 const express = require('express');
-const { createUser, getUser, updateUser } = require('../controller/userController');
+const {
+  createUser, getUserByCreds,
+} = require('../controller/userController');
 
 const router = express.Router();
 
@@ -12,14 +14,32 @@ router.post('/register', async (req, res) => {
   if (createRes.statusCode === 201) {
     res.status(201).send({
       user: {
-        email: createRes.body.email,
-        name: createRes.body.name,
+        email: createRes.body.dataValues.email,
+        name: createRes.body.dataValues.name,
       },
     });
   } else {
     res.status(500).send({
       errors: {
         body: createRes.body,
+      },
+    });
+  }
+});
+
+router.get('/login', async (req, res) => {
+  const userCreds = req.body.userObject;
+  const { email } = userCreds;
+  const { password } = userCreds;
+  const userDetails = await getUserByCreds(email, password);
+  if (userDetails.statusCode === 200) {
+    res.status(200).send({
+      user: userDetails.body.dataValues,
+    });
+  } else {
+    res.status(userDetails.statusCode).send({
+      errors: {
+        body: userDetails.body,
       },
     });
   }

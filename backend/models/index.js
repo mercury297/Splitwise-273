@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 const Sequelize = require('sequelize');
 // const { groupUsers } = require('./group_user');
+// const DT = Sequelize.DataTypes;
 const { groups } = require('./group');
+const { groupUsers } = require('./group_user');
 const { users } = require('./user');
 const { transactions } = require('./transaction');
 const { expenses } = require('./expenses');
@@ -53,7 +55,11 @@ users.belongsToMany(
 
 groups.hasMany(expenses);
 
-sequelize.sync()
+sequelize.sync(
+  // {
+  //   force: true,
+  // },
+)
   .then(() => {
     console.log('databases created ig');
   })
@@ -61,9 +67,25 @@ sequelize.sync()
     console.log(err.sql);
   });
 
+// const addInviteField = async () => {
+//   try {
+//     const result = await sequelize.query('ALTER TABLE group_users
+//                         ADD COLUMN invite_accepted bool default false;');
+//     console.log(result);
+//     return result;
+//   } catch {
+//     return 'Some error adding column';
+//   }
+// };
+
+// const output = addInviteField();
+
 module.exports = {
   groups,
   users,
   transactions,
   expenses,
+  groupUsers,
 };
+
+// console.log('Results for group_users field :', output);

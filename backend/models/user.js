@@ -46,6 +46,9 @@ const users = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    timezone: {
+      type: DT.STRING(200),
+    },
     password: {
       type: DT.STRING(200),
       allowNull: false,
@@ -53,7 +56,11 @@ const users = sequelize.define(
   },
 );
 
-sequelize.sync()
+sequelize.sync(
+  // {
+  //   force: true,
+  // },
+)
   .then(() => {
     console.log('user db created');
   })
