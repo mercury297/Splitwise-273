@@ -34,13 +34,13 @@ const getUser = async (userID) => {
   }
 };
 
-const getUserByCreds = async (email, password) => {
+const getUserByCreds = async (userEmail, userPassword) => {
   try {
     const userObject = await users.findOne({
       where: {
         [Op.and]: [
-          { email },
-          { password },
+          { email: userEmail },
+          { password: userPassword },
         ],
       },
     });
