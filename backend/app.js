@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const app = express();
 const bp = require('body-parser');
 
+// eslint-disable-next-line no-unused-vars
 const db = require('./models/index');
 
 app.use(bp.urlencoded({ extended: false }));
@@ -23,6 +24,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(express.static('public'));
 
 app.use('/user', require('./routes/userRoutes'));
 
