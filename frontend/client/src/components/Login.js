@@ -43,7 +43,7 @@ class Login extends Component {
 
   render() {
     if (this.props.authUser) {
-      return <Redirect to="/profile" />;
+      return <Redirect to="/user/profile" />;
     }
     return (
       <div>
@@ -73,7 +73,7 @@ class Login extends Component {
             />
           </div>
           <div className="form-group">
-            <Link to="/register"> Don&apos;t have an account? </Link>
+            <Link to="/user/register"> Don&apos;t have an account? </Link>
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>

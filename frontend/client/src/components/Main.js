@@ -5,14 +5,16 @@ import { Route } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Profile from './Profle';
+import LandingPage from './LandingPage';
 
 class Main extends Component {
   render() {
     return (
       <div>
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/profile" component={Profile} />
+        <Route path="/user/login" component={Login} />
+        <Route path="/user/register" component={Register} />
+        <Route path="/user/profile" component={Profile} />
+        <Route path="/" component={LandingPage} />
       </div>
     );
   }
