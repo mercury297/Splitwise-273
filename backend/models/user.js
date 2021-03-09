@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt');
 // const { groups } = require('./group');
 
 const DT = Sequelize.DataTypes;
@@ -14,6 +15,8 @@ const sequelize = new Sequelize('splitdb', 'root', 'root_123', {
     ssl: 'Amazon RDS',
   },
 });
+
+const salt = 10;
 
 const users = sequelize.define(
   'user_table',
@@ -52,6 +55,15 @@ const users = sequelize.define(
     password: {
       type: DT.STRING(200),
       allowNull: false,
+    },
+  },
+  {
+    hooks: {
+      // eslint-disable-next-line no-shadow
+      beforeCreate: (users) => {
+        // eslint-disable-next-line no-param-reassign
+        users.password = users.password !== '' ? bcrypt.hashSync(users.password, salt) : '';
+      },
     },
   },
 );

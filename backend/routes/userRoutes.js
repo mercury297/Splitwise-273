@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const {
   createUser, getUserByCreds,
 } = require('../controller/userController');
@@ -31,10 +32,34 @@ router.post('/login', async (req, res) => {
   const userCreds = req.body.userObject;
   const { email } = userCreds;
   const { password } = userCreds;
-  const userDetails = await getUserByCreds(email, password);
+  let userDetails = await getUserByCreds(email);
   if (userDetails.statusCode === 200) {
-    res.status(200).send({
-      user: userDetails.body.dataValues,
+    userDetails = userDetails.body.dataValues;
+    bcrypt.compare(password, userDetails.password, (
+      err,
+      isMatch,
+    ) => {
+      console.log(bcrypt.hashSync(password, 10));
+      // console.log(userDetails.password);
+      if (err) {
+        res.status(500).send({
+          errors: {
+            body: err,
+          },
+        });
+      } else if (!isMatch) {
+        res.status(403).send({
+          errors: {
+            body: 'Unauth User',
+          },
+        });
+      } else {
+        console.log('Successful log in');
+        delete userDetails.password;
+        res.status(200).send({
+          user: userDetails,
+        });
+      }
     });
   } else {
     res.status(userDetails.statusCode).send({

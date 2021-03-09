@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-const { Op } = require('sequelize');
+// const { Op } = require('sequelize');
 const { users } = require('../models/index');
 
 // eslint-disable-next-line consistent-return
@@ -34,14 +34,15 @@ const getUser = async (userID) => {
   }
 };
 
-const getUserByCreds = async (userEmail, userPassword) => {
+const getUserByCreds = async (userEmail) => {
   try {
     const userObject = await users.findOne({
       where: {
-        [Op.and]: [
-          { email: userEmail },
-          { password: userPassword },
-        ],
+        // [Op.and]: [
+        //   { email: userEmail },
+        //   { password: userPassword },
+        // ],
+        email: userEmail,
       },
     });
     if (userObject !== undefined) {
