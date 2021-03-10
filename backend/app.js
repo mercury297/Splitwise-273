@@ -9,9 +9,10 @@ const bp = require('body-parser');
 // eslint-disable-next-line no-unused-vars
 const db = require('./models/index');
 
-app.use(bp.urlencoded({ extended: false }));
-
 app.use(bp.json());
+app.use(bp.urlencoded({
+  extended: true,
+}));
 app.use(morgan('dev'));
 
 // eslint-disable-next-line consistent-return

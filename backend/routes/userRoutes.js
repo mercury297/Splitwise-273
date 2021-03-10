@@ -1,8 +1,15 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 const {
   createUser, getUserByCreds,
 } = require('../controller/userController');
+// const s3Uploader = require('../services/s3Uploader');
+const { getParams, s3 } = require('../services/s3Uploader');
 
 const router = express.Router();
 
@@ -70,8 +77,24 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// module.exports = {
-//   router,
-// };
+router.post('/updateProfilePicture', upload.single('file'), (req, res) => {
+  // console.log(req.body);
+  const { file } = req;
+  const { userID } = req.body;
+  console.log('file', file);
+  const params = getParams(userID, file.buffer, file.mimetype);
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      res.status(500).send({
+        errors: {
+          body: err,
+        },
+      });
+    } else {
+      res.send({ data });
+    }
+  });
+});
 
 module.exports = router;
