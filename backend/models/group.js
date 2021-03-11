@@ -3,8 +3,8 @@ const Sequelize = require('sequelize');
 
 const DT = Sequelize.DataTypes;
 
-const sequelize = new Sequelize('splitdb', 'root', 'root_123', {
-  host: 'splitwise-db.cxahoocsb1cn.us-east-2.rds.amazonaws.com',
+const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
+  host: process.env.DB_URI,
   port: 3306,
   // eslint-disable-next-line no-console
   logging: console.log,
@@ -38,7 +38,11 @@ const groups = sequelize.define(
   },
 );
 
-sequelize.sync()
+sequelize.sync(
+  {
+    force: process.env.SEQUELIZE_SYNC_FORCE,
+  },
+)
   .then(() => {
     console.log('group db created');
   })

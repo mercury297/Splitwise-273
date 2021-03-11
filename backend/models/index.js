@@ -8,8 +8,8 @@ const { users } = require('./user');
 const { transactions } = require('./transaction');
 const { expenses } = require('./expenses');
 
-const sequelize = new Sequelize('splitdb', 'root', 'root_123', {
-  host: 'splitwise-db.cxahoocsb1cn.us-east-2.rds.amazonaws.com',
+const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
+  host: process.env.DB_URI,
   port: 3306,
   // eslint-disable-next-line no-console
   logging: console.log,
@@ -30,30 +30,6 @@ sequelize
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
-
-groups.belongsToMany(
-  users,
-  {
-    // junction table
-    through: 'group_users',
-
-    // parent class id
-    foreignKey: 'group_id',
-  },
-);
-
-users.belongsToMany(
-  groups,
-  {
-    // junction table
-    through: 'group_users',
-
-    // parent class id
-    foreignKey: 'user_id',
-  },
-);
-
-groups.hasMany(expenses);
 
 sequelize.sync(
   // {

@@ -7,6 +7,9 @@ const app = express();
 const bp = require('body-parser');
 
 // eslint-disable-next-line no-unused-vars
+const dotenv = require('dotenv');
+
+dotenv.config();
 const db = require('./models/index');
 
 app.use(bp.json());
@@ -35,5 +38,6 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to chinmay\'s application.' });
 });
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT;
+// || 3001;
 app.listen(port, () => console.log(`listening on port ${port}`));

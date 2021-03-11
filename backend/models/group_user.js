@@ -1,48 +1,57 @@
-// const Sequelize = require('sequelize');
-// // const { users } = require('./user');
-// // const { groups } = require('./group');
+const Sequelize = require('sequelize');
+// const { users } = require('./user');
+// const { groups } = require('./group');
 
-// const DT = Sequelize.DataTypes;
+const DT = Sequelize.DataTypes;
 
-// const sequelize = new Sequelize('splitdb', 'root', 'root_123', {
-//   host: 'splitwise-db.cxahoocsb1cn.us-east-2.rds.amazonaws.com',
-//   port: 3306,
-//   // eslint-disable-next-line no-console
-//   logging: console.log,
-//   maxConcurrentQueries: 100,
-//   dialect: 'mysql',
-//   dialectOptions: {
-//     ssl: 'Amazon RDS',
-//   },
-// });
+const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
+  host: process.env.DB_URI,
+  port: 3306,
+  // eslint-disable-next-line no-console
+  logging: console.log,
+  maxConcurrentQueries: 100,
+  dialect: 'mysql',
+  dialectOptions: {
+    ssl: 'Amazon RDS',
+  },
+});
 
-// // const groupUsers = sequelize.define(
-// //   'group_users',
-// //   {
-// //     user_id: {
-// //       type: DT.STRING,
-// //       allowNull: false,
-// //       references: {
-// //         model: 'user_table',
-// //         key: 'user_id',
-// //       },
-// //     },
-// //     group_id: {
-// //       type: DT.STRING,
-// //       allowNull: false,
-// //       references: {
-// //         model: 'group_table',
-// //         key: 'group_id',
-// //       },
-// //     },
-// //   },
-// // );
+const groupUsers = sequelize.define('group_users',
+  {
+    group_user_id: {
+      type: DT.UUID,
+      primaryKey: true,
+      defaultValue: DT.UUIDV1,
+    },
+    invite_flag: {
+      type: DT.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+    group_id: {
+      type: DT.STRING,
+      allowNull: false,
+    },
+    user_id: {
+      type: DT.STRING,
+      allowNull: false,
+    },
+  });
 
-// // sequelize.sync();
-
-// // module.exports = {
-// //   groupUsers,
-// // };
+sequelize.sync(
+  {
+    force: process.env.SEQUELIZE_SYNC_FORCE,
+  },
+)
+  .then(() => {
+    console.log('group_user db created');
+  })
+  .catch((err) => {
+    console.log(err.sql);
+  });
+module.exports = {
+  groupUsers,
+};
 
 // // groups.belongsToMany(
 // //   users,
