@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 app.use(express.static('public'));
 
 app.use('/user', require('./routes/userRoutes'));
+app.use('/group', require('./routes/groupRoutes'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to chinmay\'s application.' });
