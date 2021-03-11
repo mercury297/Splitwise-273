@@ -22,9 +22,17 @@ const createUser = async (name, email, password) => {
 const getUser = async (userID) => {
   try {
     const userObject = await users.findByPk(userID);
+    // console.log(userObject);
+    if (userObject !== undefined && userObject !== null) {
+      // console.log(200);
+      return {
+        statusCode: 200,
+        body: userObject,
+      };
+    }
     return {
-      statusCode: 200,
-      body: userObject,
+      statusCode: 404,
+      body: 'User not found',
     };
   } catch (err) {
     return {
@@ -45,7 +53,7 @@ const getUserByCreds = async (userEmail) => {
         email: userEmail,
       },
     });
-    if (userObject !== undefined) {
+    if (userObject !== undefined && userObject !== null) {
       return {
         statusCode: 200,
         body: userObject,
@@ -70,17 +78,23 @@ const getUserByCreds = async (userEmail) => {
  * @param  {Object} updateData update object eg: {name: Yash, language: Spanish}
  * @return {String}      Successful update or Failure
  */
-const updateUser = (userID, updateData) => {
+const updateUser = async (userID, updateData) => {
   try {
-    users.findByPk(userID)
-      .then(
-        (user) => {
-          user.update(updateData)
-            .then(() => 'User data updated succesfully');
-        },
-      );
+    const updateObject = await users.update(
+      updateData,
+      { where: { user_id: userID } },
+    );
+    if (updateObject !== undefined && updateObject !== null) {
+      return {
+        statusCode: 200,
+        body: updateObject,
+      };
+    }
   } catch (err) {
-    return 'Error. Could not update user';
+    return {
+      statusCode: 500,
+      body: err,
+    };
   }
 };
 

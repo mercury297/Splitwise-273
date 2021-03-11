@@ -6,8 +6,9 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 const {
-  createUser, getUserByCreds,
+  createUser, getUserByCreds, getUser, updateUser,
 } = require('../controller/userController');
+// const { getGroup } = require('../controller/groupController');
 // const s3Uploader = require('../services/s3Uploader');
 const { getParams, s3 } = require('../services/s3Uploader');
 
@@ -77,14 +78,37 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/updateProfilePicture', upload.single('file'), (req, res) => {
+router.post('/updateProfilePicture', upload.single('file'), async (req, res) => {
   // console.log(req.body);
   const { file } = req;
-  const { userID } = req.body;
+  const { ID } = req.body;
   console.log('file', file);
-  const params = getParams(userID, file.buffer, file.mimetype);
+  // console.log('inside');
+  const userDetails = await getUser(ID);
+  // console.log(userDetails);
+  if (userDetails.statusCode === 500 || userDetails.statusCode === 404) {
+    res.status(500).send({
+      errors: {
+        body: userDetails.body,
+      },
+    });
+  }
+  // eslint-disable-next-line brace-style
+  // else if (type === 'group') {
+  //   const groupDetails = await getGroup(ID);
+  //   if (groupDetails.statusCode === 500 || groupDetails.statusCode === 404) {
+  //     res.status(500).send({
+  //       errors: {
+  //         body: groupDetails.body,
+  //       },
+  //     });
+  //   }
+  //   // eslint-disable-next-line no-unused-vars
+  //   groupFlag = true;
+  // }
+  const params = getParams(ID, file.buffer, file.mimetype);
 
-  s3.upload(params, (err, data) => {
+  s3.upload(params, async (err, data) => {
     if (err) {
       res.status(500).send({
         errors: {
@@ -92,7 +116,18 @@ router.post('/updateProfilePicture', upload.single('file'), (req, res) => {
         },
       });
     } else {
-      res.send({ data });
+      const userUpdateRes = await updateUser(ID, { photo_URL: data.Location });
+      if (userUpdateRes.statusCode === 200) {
+        res.status(200).send({
+          update: userUpdateRes.body,
+        });
+      } else {
+        res.status(500).send({
+          errors: {
+            body: userUpdateRes.body,
+          },
+        });
+      }
     }
   });
 });
