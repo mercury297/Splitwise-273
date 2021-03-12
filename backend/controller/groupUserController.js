@@ -74,8 +74,64 @@ const createGroupUser = async (groupID, userID) => {
   }
 };
 
+const getInvitations = async (userID) => {
+  try {
+    const getInvitationObject = await groupUsers.findAll({
+      where: {
+        user_id: userID,
+        invite_flag: false,
+      },
+    });
+    if (getInvitationObject !== undefined || getInvitationObject !== null) {
+      return {
+        statusCode: 200,
+        body: getInvitationObject,
+      };
+    }
+    return {
+      statusCode: 500,
+      body: 'Could not get Invitations for this user',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
+const acceptInvitation = async (groupID) => {
+  try {
+    const acceptInvitationObject = await groupUsers.update(
+      { invite_flag: true },
+      {
+        where: {
+          group_id: groupID,
+        },
+      },
+    );
+    if (acceptInvitationObject !== undefined || acceptInvitationObject !== null) {
+      return {
+        statusCode: 200,
+        body: 'Invitation accepted successfully',
+      };
+    }
+    return {
+      statusCode: 500,
+      body: 'Invitation update unsuccesful.',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   getGroupUsers,
   deleteGroupUsers,
   createGroupUser,
+  getInvitations,
+  acceptInvitation,
 };
