@@ -42,6 +42,10 @@ const transactions = sequelize.define(
       type: DT.BOOLEAN,
       allowNull: false,
     },
+    group_id: {
+      type: DT.STRING,
+      allowNull: false,
+    },
   },
 );
 

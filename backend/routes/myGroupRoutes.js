@@ -1,5 +1,7 @@
 const express = require('express');
 const { getInvitations, acceptInvitation } = require('../controller/groupUserController');
+const { getDuesForGroup } = require('../controller/transactionController');
+const { leaveGroupUser } = require('../controller/groupUserController');
 
 const router = express.Router();
 
@@ -33,6 +35,24 @@ router.post('/acceptInvitation', async (req, res) => {
         body: acceptInvitationRes.body,
       },
     });
+  }
+});
+
+router.delete('/leaveGroup', async (req, res) => {
+  const { groupID } = req.body;
+  const { userID } = req.body;
+  const getDuesRes = await getDuesForGroup(userID, groupID);
+  if (getDuesRes.statusCode === 200 && getDuesRes.body.length === 0) {
+    // console.log('line 46');
+    const leaveObject = await leaveGroupUser(groupID, userID);
+    // console.log(leaveObject);
+    if (leaveObject.statusCode === 200) {
+      res.status(200).send('user left group');
+    } else {
+      res.status(500).send(leaveObject.body);
+    }
+  } else {
+    res.send(getDuesRes);
   }
 });
 

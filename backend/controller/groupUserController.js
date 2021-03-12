@@ -128,10 +128,40 @@ const acceptInvitation = async (groupID) => {
   }
 };
 
+const leaveGroupUser = async (groupID, userID) => {
+  try {
+    const leaveGroupUserObject = await groupUsers.destroy({
+      where: {
+        group_id: groupID,
+        user_id: userID,
+      },
+    });
+    if (leaveGroupUserObject !== undefined
+      && leaveGroupUserObject !== null
+      // eslint-disable-next-line eqeqeq
+      && leaveGroupUserObject != 0) {
+      return {
+        statusCode: 200,
+        body: 'User group entries deleted successfully(user left group).',
+      };
+    }
+    return {
+      statusCode: 500,
+      body: 'User already left group.',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   getGroupUsers,
   deleteGroupUsers,
   createGroupUser,
   getInvitations,
   acceptInvitation,
+  leaveGroupUser,
 };
