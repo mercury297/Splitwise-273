@@ -5,7 +5,7 @@ const { groupUsers } = require('../models/index');
 const getGroup = async (userID) => {
   try {
     const groupObject = await groups.findByPk(userID);
-    if (groupObject !== undefined && groupObject !== null) {
+    if (groupObject !== undefined || groupObject !== null) {
       return {
         statusCode: 200,
         body: groupObject,
@@ -43,7 +43,38 @@ const createGroup = async (groupName, emailID, userID) => {
   }
 };
 
+/**
+ * [someFunction description]
+ * @param  {String} groupID ID of user to be updated
+ * @param  {Object} updateData update object eg: {name: Yash, language: Spanish}
+ * @return {String}      Successful update or Failure
+ */
+const updateGroup = async (groupID, updateData) => {
+  try {
+    const updateObject = await groups.update(
+      updateData,
+      { where: { group_id: groupID } },
+    );
+    if (updateObject !== undefined && updateObject !== null) {
+      return {
+        statusCode: 200,
+        body: updateObject,
+      };
+    }
+    return {
+      statusCode: 500,
+      body: 'Update not successful',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   createGroup,
   getGroup,
+  updateGroup,
 };

@@ -38,21 +38,19 @@ const groups = sequelize.define(
   },
 );
 
-sequelize.sync(
-  {
-    force: process.env.SEQUELIZE_SYNC_FORCE,
-  },
-)
-  .then(() => {
-    console.log('group db created');
-  })
-  .catch((err) => {
-    console.log(err.sql);
-  });
-
-module.exports = {
-  groups,
-};
+if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
+  sequelize.sync(
+    {
+      force: true,
+    },
+  )
+    .then(() => {
+      console.log('group db created');
+    })
+    .catch((err) => {
+      console.log(err.sql);
+    });
+}
 
 // groups.belongsToMany(
 //   users,
@@ -73,3 +71,7 @@ module.exports = {
 //   });
 // };
 // groups.belongsTo(users, { foreignKey: 'user_id' });
+
+module.exports = {
+  groups,
+};

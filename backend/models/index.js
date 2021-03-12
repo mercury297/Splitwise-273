@@ -31,17 +31,19 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-sequelize.sync(
-  // {
-  //   force: true,
-  // },
-)
-  .then(() => {
-    console.log('databases created ig');
-  })
-  .catch((err) => {
-    console.log(err.sql);
-  });
+if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
+  sequelize.sync(
+    {
+      force: true,
+    },
+  )
+    .then(() => {
+      console.log('all dbs created');
+    })
+    .catch((err) => {
+      console.log(err.sql);
+    });
+}
 
 // const addInviteField = async () => {
 //   try {

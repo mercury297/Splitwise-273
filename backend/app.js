@@ -10,6 +10,7 @@ const bp = require('body-parser');
 const dotenv = require('dotenv');
 
 dotenv.config();
+// eslint-disable-next-line no-unused-vars
 const db = require('./models/index');
 
 app.use(bp.json());
@@ -30,9 +31,9 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('public'));
-
+console.log('env baby: ', process.env.SEQUELIZE_SYNC_FORCE);
 app.use('/user', require('./routes/userRoutes'));
-app.use('/group', require('./routes/groupRoutes'));
+app.use('/group/createGroup/', require('./routes/createGroupRoutes'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to chinmay\'s application.' });

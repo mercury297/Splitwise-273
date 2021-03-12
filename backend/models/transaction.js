@@ -45,17 +45,19 @@ const transactions = sequelize.define(
   },
 );
 
-sequelize.sync(
-  {
-    force: process.env.SEQUELIZE_SYNC_FORCE,
-  },
-)
-  .then(() => {
-    console.log('TX db created');
-  })
-  .catch((err) => {
-    console.log(err.sql);
-  });
+if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
+  sequelize.sync(
+    {
+      force: true,
+    },
+  )
+    .then(() => {
+      console.log('tx db created');
+    })
+    .catch((err) => {
+      console.log(err.sql);
+    });
+}
 
 module.exports = {
   transactions,
