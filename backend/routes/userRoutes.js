@@ -82,8 +82,6 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
   // console.log(req.body);
   const { file } = req;
   const { ID } = req.body;
-  console.log('file', file);
-  // console.log('inside');
   const userDetails = await getUser(ID);
   // console.log(userDetails);
   if (userDetails.statusCode === 500 || userDetails.statusCode === 404) {
@@ -93,19 +91,6 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
       },
     });
   }
-  // eslint-disable-next-line brace-style
-  // else if (type === 'group') {
-  //   const groupDetails = await getGroup(ID);
-  //   if (groupDetails.statusCode === 500 || groupDetails.statusCode === 404) {
-  //     res.status(500).send({
-  //       errors: {
-  //         body: groupDetails.body,
-  //       },
-  //     });
-  //   }
-  //   // eslint-disable-next-line no-unused-vars
-  //   groupFlag = true;
-  // }
   const params = getParams(ID, file.buffer, file.mimetype);
 
   s3.upload(params, async (err, data) => {
@@ -130,6 +115,23 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
       }
     }
   });
+});
+
+router.post('/updateUserDetails', async (req, res) => {
+  const updateDetails = req.body.updateObject;
+  const { userID } = updateDetails;
+  const { updateData } = updateDetails;
+
+  const updateRes = await updateUser(userID, updateData);
+  if (updateRes.statusCode === 200) {
+    res.status(200).send('User updated successfully!');
+  } else {
+    res.status(500).send({
+      errors: {
+        body: updateRes.body,
+      },
+    });
+  }
 });
 
 module.exports = router;
