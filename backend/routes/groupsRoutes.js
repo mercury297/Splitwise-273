@@ -29,8 +29,9 @@ router.post('/addExpense', async (req, res) => {
 
     const createTxObject = await createTransactionsForExpense(txArray);
     res.status(createTxObject.statusCode).send(createTxObject.body);
+  } else {
+    res.status(statusCode).send(body);
   }
-  res.status(statusCode).send(body);
 });
 
 module.exports = router;
