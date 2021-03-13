@@ -31,10 +31,12 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('public'));
-console.log('env baby: ', process.env.SEQUELIZE_SYNC_FORCE);
+console.log('env baby:', process.env.SEQUELIZE_SYNC_FORCE);
 app.use('/user', require('./routes/userRoutes'));
 app.use('/group/createGroup', require('./routes/createGroupRoutes'));
 app.use('/group/myGroups', require('./routes/myGroupRoutes'));
+app.use('/recentActivity', require('./routes/recentActivityRoutes'));
+app.use('/expenses', require('./routes/expenseRoutes'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to chinmay\'s application.' });

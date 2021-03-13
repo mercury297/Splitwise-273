@@ -5,10 +5,10 @@ const { users } = require('../models/index');
 // eslint-disable-next-line consistent-return
 const createUser = async (name, email, password) => {
   try {
-    const userObejct = await users.create({ name, email, password });
+    const userObject = await users.create({ name, email, password });
     return {
       statusCode: 201,
-      body: userObejct,
+      body: userObject,
     };
   } catch (err) {
     return {

@@ -7,6 +7,7 @@ const { groupUsers } = require('./group_user');
 const { users } = require('./user');
 const { transactions } = require('./transaction');
 const { expenses } = require('./expenses');
+const { recentActivity } = require('./recentActivity');
 
 const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
   host: process.env.DB_URI,
@@ -45,25 +46,11 @@ if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
     });
 }
 
-// const addInviteField = async () => {
-//   try {
-//     const result = await sequelize.query('ALTER TABLE group_users
-//                         ADD COLUMN invite_accepted bool default false;');
-//     console.log(result);
-//     return result;
-//   } catch {
-//     return 'Some error adding column';
-//   }
-// };
-
-// const output = addInviteField();
-
 module.exports = {
   groups,
   users,
   transactions,
   expenses,
   groupUsers,
+  recentActivity,
 };
-
-// console.log('Results for group_users field :', output);

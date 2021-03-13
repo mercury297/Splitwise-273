@@ -2,6 +2,7 @@ const express = require('express');
 const { getInvitations, acceptInvitation } = require('../controller/groupUserController');
 const { getDuesForGroup } = require('../controller/transactionController');
 const { leaveGroupUser } = require('../controller/groupUserController');
+// const { createActivity } = require('../controller/recentActivityController');
 
 const router = express.Router();
 
