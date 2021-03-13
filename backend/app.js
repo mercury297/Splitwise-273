@@ -35,6 +35,7 @@ console.log('env baby:', process.env.SEQUELIZE_SYNC_FORCE);
 app.use('/user', require('./routes/userRoutes'));
 app.use('/group/createGroup', require('./routes/createGroupRoutes'));
 app.use('/group/myGroups', require('./routes/myGroupRoutes'));
+app.use('/group/', require('./routes/groupsRoutes'));
 app.use('/recentActivity', require('./routes/recentActivityRoutes'));
 app.use('/expenses', require('./routes/expenseRoutes'));
 

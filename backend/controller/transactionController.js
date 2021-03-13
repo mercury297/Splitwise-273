@@ -27,6 +27,29 @@ const getDuesForGroup = async (userID, groupID) => {
   }
 };
 
+const createTransactionsForExpense = async (transactionArray) => {
+  try {
+    const transactionsObject = await transactions.bulkCreate(transactionArray);
+    if (transactionsObject !== undefined
+      && transactionsObject !== null) {
+      return {
+        statusCode: 201,
+        body: transactionsObject,
+      };
+    }
+    return {
+      statusCode: 404,
+      body: 'transaction bulk create failed.',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   getDuesForGroup,
+  createTransactionsForExpense,
 };

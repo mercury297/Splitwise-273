@@ -32,9 +32,7 @@ const expenses = sequelize.define(
     },
     paid_by: {
       type: DT.STRING,
-      validate: {
-        isEMail: true,
-      },
+      isEMail: true,
     },
     amount: {
       type: DT.STRING(100),
@@ -42,11 +40,9 @@ const expenses = sequelize.define(
     },
     expense_added_by: {
       type: DT.STRING,
-      validate: {
-        isEmail: true,
-      },
+      isEMail: true,
     },
-    group_id: {
+    group_name: {
       type: DT.STRING,
     },
   },

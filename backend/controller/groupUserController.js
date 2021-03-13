@@ -26,6 +26,32 @@ const getGroupUsers = async (groupID) => {
   }
 };
 
+const getUsersByGroupName = async (groupName) => {
+  try {
+    const groupObject = await groupUsers.findAll({
+      attributes: ['email', 'group_id'],
+      where: {
+        group_name: groupName,
+      },
+    });
+    if (groupObject !== undefined || groupObject !== null) {
+      return {
+        statusCode: 200,
+        body: groupObject,
+      };
+    }
+    return {
+      statusCode: 404,
+      body: 'No such group exists',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 const deleteGroupUsers = async (groupID) => {
   try {
     const deleteObject = await groupUsers.destroy({
@@ -51,11 +77,13 @@ const deleteGroupUsers = async (groupID) => {
   }
 };
 
-const createGroupUser = async (groupID, userID) => {
+const createGroupUser = async (groupID, userID, groupName, email) => {
   try {
     const createObject = await groupUsers.create({
       group_id: groupID,
       user_id: userID,
+      group_name: groupName,
+      email,
     });
     if (createObject !== undefined || createObject !== null) {
       return {
@@ -101,13 +129,14 @@ const getInvitations = async (userID) => {
   }
 };
 
-const acceptInvitation = async (groupID) => {
+const acceptInvitation = async (userID, groupID) => {
   try {
     const acceptInvitationObject = await groupUsers.update(
       { invite_flag: true },
       {
         where: {
           group_id: groupID,
+          user_id: userID,
         },
       },
     );
@@ -196,4 +225,5 @@ module.exports = {
   acceptInvitation,
   leaveGroupUser,
   getMyGroups,
+  getUsersByGroupName,
 };

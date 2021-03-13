@@ -32,6 +32,7 @@ const createGroup = async (groupName, emailID, userID) => {
       group_id: groupObject.group_id,
       user_id: userID,
       group_name: groupObject.group_name,
+      email: emailID,
     });
     console.log('group user: ', groupUserObject);
     return {

@@ -26,8 +26,8 @@ router.post('/getInvitationList', async (req, res) => {
 });
 
 router.post('/acceptInvitation', async (req, res) => {
-  const { groupID } = req.body;
-  const acceptInvitationRes = await acceptInvitation(groupID);
+  const { userID, groupID } = req.body;
+  const acceptInvitationRes = await acceptInvitation(userID, groupID);
   if (acceptInvitationRes.statusCode === 200) {
     res.status(200).send(acceptInvitationRes.body);
   } else {

@@ -97,8 +97,10 @@ router.post('/sendInvite', async (req, res) => {
   const inviteDetails = req.body.inviteObject;
   const { groupID } = inviteDetails;
   const { userID } = inviteDetails;
+  const { email } = inviteDetails;
+  const { groupName } = inviteDetails;
 
-  const sendInviteRes = await createGroupUser(groupID, userID);
+  const sendInviteRes = await createGroupUser(groupID, userID, groupName, email);
   if (sendInviteRes.statusCode === 201) {
     res.status(201).send(`Invite sent to user with user_id = ${userID}`);
   } else {

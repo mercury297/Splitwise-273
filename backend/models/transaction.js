@@ -24,15 +24,13 @@ const transactions = sequelize.define(
     },
     user_that_owes: {
       type: DT.STRING,
-      validate: {
-        isEMail: true,
-      },
+      isEmail: true,
+      allowNull: false,
     },
     user_that_paid: {
       type: DT.STRING,
-      validate: {
-        isEMail: true,
-      },
+      isEmail: true,
+      allowNull: false,
     },
     amount_owed: {
       type: DT.STRING(100),
@@ -41,6 +39,7 @@ const transactions = sequelize.define(
     settled_flag: {
       type: DT.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
     group_id: {
       type: DT.STRING,

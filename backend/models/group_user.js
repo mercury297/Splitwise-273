@@ -36,6 +36,12 @@ const groupUsers = sequelize.define('group_users',
       type: DT.STRING,
       allowNull: false,
     },
+    email: {
+      type: DT.STRING(100),
+      isEmail: true,
+      allowNull: false,
+
+    },
     group_name: {
       type: DT.STRING,
       allowNull: false,
