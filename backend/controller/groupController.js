@@ -2,9 +2,9 @@ const { groups } = require('../models/index');
 const { groupUsers } = require('../models/index');
 
 // Get group details by group ID
-const getGroup = async (userID) => {
+const getGroup = async (groupID) => {
   try {
-    const groupObject = await groups.findByPk(userID);
+    const groupObject = await groups.findByPk(groupID);
     if (groupObject !== undefined || groupObject !== null) {
       return {
         statusCode: 200,
@@ -28,7 +28,10 @@ const createGroup = async (groupName, emailID, userID) => {
     const groupObject = await groups.create({ group_name: groupName, created_by: emailID });
     console.log('group :', groupObject);
     const groupUserObject = await groupUsers.create({
-      invite_flag: true, group_id: groupObject.group_id, user_id: userID,
+      invite_flag: true,
+      group_id: groupObject.group_id,
+      user_id: userID,
+      group_name: groupObject.group_name,
     });
     console.log('group user: ', groupUserObject);
     return {

@@ -1,7 +1,7 @@
 const express = require('express');
 const { getInvitations, acceptInvitation } = require('../controller/groupUserController');
 const { getDuesForGroup } = require('../controller/transactionController');
-const { leaveGroupUser } = require('../controller/groupUserController');
+const { leaveGroupUser, getMyGroups } = require('../controller/groupUserController');
 // const { createActivity } = require('../controller/recentActivityController');
 
 const router = express.Router();
@@ -55,6 +55,15 @@ router.delete('/leaveGroup', async (req, res) => {
   } else {
     res.send(getDuesRes);
   }
+});
+
+router.get('/getMyGroups/:userID', async (req, res) => {
+  // const userID = req.params.userID;
+  const getMyGroupsRes = await getMyGroups(req.params.userID);
+  const { statusCode, body } = getMyGroupsRes;
+  res.status(statusCode).send({
+    myGroups: body,
+  });
 });
 
 module.exports = router;

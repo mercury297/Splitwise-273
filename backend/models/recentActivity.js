@@ -45,19 +45,19 @@ const recentActivity = sequelize.define(
   },
 );
 
-// if (process.env.SEQUELIZE_SYNC_FORCE === ' false') {
-sequelize.sync(
-  {
-    force: true,
-  },
-)
-  .then(() => {
-    console.log('recent activity db created');
-  })
-  .catch((err) => {
-    console.log(err.sql);
-  });
-// }
+if (process.env.SEQUELIZE_SYNC_FORCE === ' false') {
+  sequelize.sync(
+    {
+      force: true,
+    },
+  )
+    .then(() => {
+      console.log('recent activity db created');
+    })
+    .catch((err) => {
+      console.log(err.sql);
+    });
+}
 
 module.exports = {
   recentActivity,

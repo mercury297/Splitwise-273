@@ -3,6 +3,7 @@ const { groupUsers } = require('../models/index');
 const getGroupUsers = async (groupID) => {
   try {
     const groupObject = await groupUsers.findAll({
+      attributes: ['group_id', 'group_name'],
       where: {
         group_id: groupID,
       },
@@ -157,6 +158,36 @@ const leaveGroupUser = async (groupID, userID) => {
   }
 };
 
+const getMyGroups = async (userID) => {
+  try {
+    const myGroupsObject = await groupUsers.findAll({
+      attributes: ['group_id'],
+      where: {
+        user_id: userID,
+        invite_flag: true,
+      },
+    });
+    if (myGroupsObject !== undefined
+      && myGroupsObject !== null
+      && myGroupsObject.length !== 0) {
+      return {
+        statusCode: 200,
+        body: myGroupsObject,
+      };
+    }
+    return {
+      statusCode: 404,
+      body: 'User is not part of any group',
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   getGroupUsers,
   deleteGroupUsers,
@@ -164,4 +195,5 @@ module.exports = {
   getInvitations,
   acceptInvitation,
   leaveGroupUser,
+  getMyGroups,
 };

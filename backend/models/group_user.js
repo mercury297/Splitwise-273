@@ -36,6 +36,10 @@ const groupUsers = sequelize.define('group_users',
       type: DT.STRING,
       allowNull: false,
     },
+    group_name: {
+      type: DT.STRING,
+      allowNull: false,
+    },
   });
 
 if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
