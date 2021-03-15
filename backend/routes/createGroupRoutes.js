@@ -7,27 +7,26 @@ const upload = multer({ storage });
 const { getParams, s3 } = require('../services/s3Uploader');
 
 const { getGroup, createGroup, updateGroup } = require('../controller/groupController');
-const { getGroupUsers, createGroupUser } = require('../controller/groupUserController');
+const { createGroupUser } = require('../controller/groupUserController');
+const { getAllUsersExceptCurrent } = require('../controller/userController');
 const { createActivity } = require('../controller/recentActivityController');
 
 const router = express.Router();
 
 router.post('/createGroup', async (req, res) => {
-  const groupDetails = req.body.groupObject;
-  const { name } = groupDetails;
-  const { email } = groupDetails;
-  const { userID } = groupDetails;
-  console.log(name, email, userID);
+  const {
+    name,
+    email,
+    userID,
+  } = req.body;
   const createRes = await createGroup(name, email, userID);
   if (createRes.statusCode === 201) {
     const activityObject = await createActivity({
       operation_type: 'CREATE GROUP',
-      user_id: userID,
       email,
-      group_id: createRes.body.dataValues.group_id,
       group_name: createRes.body.dataValues.group_name,
     });
-    console.log(activityObject.body);
+    console.log('activity added :', activityObject);
     res.status(201).send({
       group: {
         name: createRes.body.dataValues.group_name,
@@ -47,7 +46,6 @@ router.post('/createGroup', async (req, res) => {
 router.post('/addProfilePicture', upload.single('file'), async (req, res) => {
   const { file } = req;
   const { groupID } = req.body;
-  const { userID } = req.body;
   const { email } = req.body;
   const { groupName } = req.body;
   const groupDetails = await getGroup(groupID);
@@ -73,9 +71,7 @@ router.post('/addProfilePicture', upload.single('file'), async (req, res) => {
       if (userUpdateRes.statusCode === 200) {
         const activityObject = await createActivity({
           operation_type: 'UPDATE GROUP PICTURE',
-          user_id: userID,
           email,
-          group_id: groupID,
           group_name: groupName,
         });
         console.log(activityObject.body);
@@ -112,20 +108,11 @@ router.post('/sendInvite', async (req, res) => {
   }
 });
 
-router.get('/getGroupUserList/:groupID', async (req, res) => {
+router.get('/getUsersForGroup/:email', async (req, res) => {
   // const { groupID } = req.body;
-  const getUsersRes = await getGroupUsers(req.params.groupID);
-  if (getUsersRes.statusCode === 200) {
-    res.status(200).send({
-      groupUsers: getUsersRes.body,
-    });
-  } else {
-    res.status(500).send({
-      errors: {
-        body: getUsersRes.body,
-      },
-    });
-  }
+  const getUsersRes = await getAllUsersExceptCurrent(req.params.email);
+  const { statusCode, body } = getUsersRes;
+  res.status(statusCode).send(body);
 });
 
 module.exports = router;

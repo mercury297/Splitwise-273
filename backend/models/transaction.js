@@ -45,6 +45,10 @@ const transactions = sequelize.define(
       type: DT.STRING,
       allowNull: false,
     },
+    expense_id: {
+      type: DT.STRING,
+      allowNull: false,
+    },
   },
 );
 

@@ -26,17 +26,9 @@ const recentActivity = sequelize.define(
       type: DT.STRING,
       allowNull: false,
     },
-    user_id: {
-      type: DT.STRING,
-      allowNull: false,
-    },
     email: {
       type: DT.STRING,
       isEMail: true,
-    },
-    group_id: {
-      type: DT.STRING,
-      allowNull: false,
     },
     group_name: {
       type: DT.STRING,

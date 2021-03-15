@@ -6,23 +6,11 @@ const { leaveGroupUser, getMyGroups } = require('../controller/groupUserControll
 
 const router = express.Router();
 
-// router.
-
 router.post('/getInvitationList', async (req, res) => {
   const { userID } = req.body;
   const invitationListRes = await getInvitations(userID);
-  //   console.log(invitationListRes);
-  if (invitationListRes.statusCode === 200) {
-    res.status(200).send({
-      invitationList: invitationListRes.body,
-    });
-  } else {
-    res.status(500).send({
-      errors: {
-        body: invitationListRes.body,
-      },
-    });
-  }
+  const { statusCode, body } = invitationListRes;
+  res.status(statusCode).send(body);
 });
 
 router.post('/acceptInvitation', async (req, res) => {
@@ -43,22 +31,20 @@ router.delete('/leaveGroup', async (req, res) => {
   const { groupID } = req.body;
   const { userID } = req.body;
   const getDuesRes = await getDuesForGroup(userID, groupID);
-  if (getDuesRes.statusCode === 200 && getDuesRes.body.length === 0) {
-    // console.log('line 46');
+  const { statusCode, body } = getDuesRes;
+  if (statusCode === 200 && body.length === 0) {
     const leaveObject = await leaveGroupUser(groupID, userID);
-    // console.log(leaveObject);
     if (leaveObject.statusCode === 200) {
-      res.status(200).send('user left group');
+      res.status(statusCode).send('user left group');
     } else {
       res.status(500).send(leaveObject.body);
     }
   } else {
-    res.send(getDuesRes);
+    res.send(body);
   }
 });
 
 router.get('/getMyGroups/:userID', async (req, res) => {
-  // const userID = req.params.userID;
   const getMyGroupsRes = await getMyGroups(req.params.userID);
   const { statusCode, body } = getMyGroupsRes;
   res.status(statusCode).send({

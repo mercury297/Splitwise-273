@@ -15,10 +15,8 @@ const { getParams, s3 } = require('../services/s3Uploader');
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
-  const userDetails = req.body.userObject;
-  const { name } = userDetails;
-  const { email } = userDetails;
-  const { password } = userDetails;
+  const userDetails = req.body;
+  const { name, email, password } = userDetails;
   const createRes = await createUser(name, email, password);
   if (createRes.statusCode === 201) {
     res.status(201).send({

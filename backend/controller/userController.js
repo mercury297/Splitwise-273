@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-// const { Op } = require('sequelize');
+const { Op } = require('sequelize');
 const { users } = require('../models/index');
 
 // eslint-disable-next-line consistent-return
@@ -42,15 +42,11 @@ const getUser = async (userID) => {
   }
 };
 
-const getUserByCreds = async (userEmail) => {
+const getUserByCreds = async (email) => {
   try {
     const userObject = await users.findOne({
       where: {
-        // [Op.and]: [
-        //   { email: userEmail },
-        //   { password: userPassword },
-        // ],
-        email: userEmail,
+        email,
       },
     });
     if (userObject !== undefined && userObject !== null) {
@@ -98,15 +94,31 @@ const updateUser = async (userID, updateData) => {
   }
 };
 
-// createUser('Yash', 'Yash@1.com', 'Yash@1');
-// const getOutput = async () => {
-//   const output = await getUserByCreds('Yash@1.com', 'Yash@1');
-//   console.log('get :', output.body.dataValues);
-// };
+const getAllUsersExceptCurrent = async (email) => {
+  try {
+    const userObject = await users.findAll({
+      where: {
+        [Op.not]: { email },
+      },
+    });
+    if (userObject !== undefined && userObject !== null) {
+      return {
+        statusCode: 200,
+        body: userObject,
+      };
+    }
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
 
 module.exports = {
   createUser,
   getUser,
   updateUser,
   getUserByCreds,
+  getAllUsersExceptCurrent,
 };

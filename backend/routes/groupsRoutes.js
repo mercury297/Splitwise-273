@@ -3,6 +3,7 @@ const { getExpenses, createExpense } = require('../controller/expenseController'
 const getTransactionsArray = require('../services/bulkTxCreater');
 const summarizer = require('../services/prepareSummary');
 const { createTransactionsForExpense, getGroupSummary } = require('../controller/transactionController');
+const { createActivity } = require('../controller/recentActivityController');
 
 const router = express.Router();
 
@@ -18,17 +19,25 @@ router.post('/addExpense', async (req, res) => {
     paid_by,
     amount,
     // eslint-disable-next-line camelcase
+    expense_added_by,
+    // eslint-disable-next-line camelcase
     group_name,
-  } = req.body.expenseBody;
+  } = req.body;
 
-  const expenseBody = await createExpense(req.body.expenseBody);
-  console.log(expenseBody);
+  const expenseBody = await createExpense(req.body);
+  // console.log(expenseBody);
   const { statusCode, body } = expenseBody;
   if (statusCode === 201) {
     const txArray = await getTransactionsArray(group_name, paid_by, amount);
     console.log('txArr:', txArray);
 
     const createTxObject = await createTransactionsForExpense(txArray);
+    const activityObject = await createActivity({
+      operation_type: 'ADD EXPENSE',
+      email: expense_added_by,
+      group_name,
+    });
+    console.log('Activity added :', activityObject);
     res.status(createTxObject.statusCode).send(createTxObject.body);
   } else {
     res.status(statusCode).send(body);
