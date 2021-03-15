@@ -16,14 +16,15 @@ const createActivity = async (activityBody) => {
   }
 };
 
-const getActivities = async (userID) => {
+const getActivities = async (email) => {
   try {
     const recentActivitiesObject = await recentActivity.findAll({
       where: {
-        user_id: userID,
+        email,
       },
     });
-    if (recentActivitiesObject !== undefined || recentActivitiesObject !== null) {
+    console.log(recentActivitiesObject);
+    if (recentActivitiesObject !== undefined && recentActivitiesObject !== null) {
       return {
         statusCode: 200,
         body: recentActivitiesObject,

@@ -118,23 +118,30 @@ const getUserSummary = async (userID) => {
 
 const settleUp = async (currentUser, settleUpUser) => {
   try {
-    const settleObject = await transactions.update(
+    const settleObjectOwed = await transactions.update(
       { settled_flag: true },
       {
         where: {
           settled_flag: false,
-          [Op.and]: [
-            { [Op.or]: [{ user_that_paid: currentUser }, { user_that_owes: settleUpUser }] },
-            { [Op.or]: [{ user_that_paid: settleUpUser }, { user_that_owes: currentUser }] },
-          ],
+          [Op.and]: [{ user_that_paid: currentUser }, { user_that_owes: settleUpUser }],
         },
       },
     );
-    if (settleObject !== undefined
-      || settleObject !== null) {
+    const settleObjectOwes = await transactions.update(
+      { settled_flag: true },
+      {
+        where: {
+          settled_flag: false,
+          [Op.and]: [{ user_that_paid: settleUpUser }, { user_that_owes: currentUser }],
+        },
+      },
+    );
+    if (settleObjectOwed !== undefined
+      && settleObjectOwes !== undefined
+      && settleObjectOwed !== null && settleObjectOwes !== null) {
       return {
         statusCode: 200,
-        body: settleObject,
+        body: { settleObjectOwed, settleObjectOwes },
       };
     }
     return {

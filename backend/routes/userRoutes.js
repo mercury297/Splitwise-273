@@ -35,7 +35,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const userCreds = req.body.userObject;
+  const userCreds = req.body;
   const { email } = userCreds;
   const { password } = userCreds;
   let userDetails = await getUserByCreds(email);
@@ -116,9 +116,8 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
 });
 
 router.post('/updateUserDetails', async (req, res) => {
-  const updateDetails = req.body.updateObject;
-  const { userID } = updateDetails;
-  const { updateData } = updateDetails;
+  const updateDetails = req.body;
+  const { userID, updateData } = updateDetails;
 
   const updateRes = await updateUser(userID, updateData);
   if (updateRes.statusCode === 200) {

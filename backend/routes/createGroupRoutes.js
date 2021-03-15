@@ -90,11 +90,10 @@ router.post('/addProfilePicture', upload.single('file'), async (req, res) => {
 });
 
 router.post('/sendInvite', async (req, res) => {
-  const inviteDetails = req.body.inviteObject;
-  const { groupID } = inviteDetails;
-  const { userID } = inviteDetails;
-  const { email } = inviteDetails;
-  const { groupName } = inviteDetails;
+  const inviteDetails = req.body;
+  const {
+    groupID, userID, email, groupName,
+  } = inviteDetails;
 
   const sendInviteRes = await createGroupUser(groupID, userID, groupName, email);
   if (sendInviteRes.statusCode === 201) {
@@ -110,6 +109,7 @@ router.post('/sendInvite', async (req, res) => {
 
 router.get('/getUsersForGroup/:email', async (req, res) => {
   // const { groupID } = req.body;
+  console.log('hi');
   const getUsersRes = await getAllUsersExceptCurrent(req.params.email);
   const { statusCode, body } = getUsersRes;
   res.status(statusCode).send(body);

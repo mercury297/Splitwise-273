@@ -6,9 +6,8 @@ const { leaveGroupUser, getMyGroups } = require('../controller/groupUserControll
 
 const router = express.Router();
 
-router.post('/getInvitationList', async (req, res) => {
-  const { userID } = req.body;
-  const invitationListRes = await getInvitations(userID);
+router.get('/getInvitationList/:userID', async (req, res) => {
+  const invitationListRes = await getInvitations(req.params.userID);
   const { statusCode, body } = invitationListRes;
   res.status(statusCode).send(body);
 });

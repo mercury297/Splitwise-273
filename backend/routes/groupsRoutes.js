@@ -1,7 +1,7 @@
 const express = require('express');
 const { getExpenses, createExpense } = require('../controller/expenseController');
 const getTransactionsArray = require('../services/bulkTxCreater');
-const summarizer = require('../services/prepareSummary');
+const { summarizer } = require('../services/prepareSummary');
 const { createTransactionsForExpense, getGroupSummary } = require('../controller/transactionController');
 const { createActivity } = require('../controller/recentActivityController');
 
@@ -38,7 +38,7 @@ router.post('/addExpense', async (req, res) => {
       group_name,
     });
     console.log('Activity added :', activityObject);
-    res.status(createTxObject.statusCode).send(createTxObject.body);
+    res.status(createTxObject.statusCode).send('Expense added successfully');
   } else {
     res.status(statusCode).send(body);
   }

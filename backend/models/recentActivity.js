@@ -37,7 +37,7 @@ const recentActivity = sequelize.define(
   },
 );
 
-if (process.env.SEQUELIZE_SYNC_FORCE === ' false') {
+if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
   sequelize.sync(
     {
       force: true,
