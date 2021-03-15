@@ -3,9 +3,10 @@ const { groupUsers } = require('../models/index');
 const getGroupUsers = async (groupID) => {
   try {
     const groupObject = await groupUsers.findAll({
-      attributes: ['group_id', 'group_name'],
+      attributes: ['user_id', 'email', 'group_name'],
       where: {
         group_id: groupID,
+        invite_flag: true,
       },
     });
     if (groupObject !== undefined || groupObject !== null) {

@@ -1,7 +1,8 @@
 const express = require('express');
 const { getExpenses, createExpense } = require('../controller/expenseController');
 const getTransactionsArray = require('../services/bulkTxCreater');
-const { createTransactionsForExpense } = require('../controller/transactionController');
+const summarizer = require('../services/prepareSummary');
+const { createTransactionsForExpense, getGroupSummary } = require('../controller/transactionController');
 
 const router = express.Router();
 
@@ -32,6 +33,13 @@ router.post('/addExpense', async (req, res) => {
   } else {
     res.status(statusCode).send(body);
   }
+});
+
+router.get('/getSummary/:groupID', async (req, res) => {
+  const summaryBody = await getGroupSummary(req.params.groupID);
+  const { statusCode, body } = summaryBody;
+  const summaryObject = await summarizer(body, req.params.groupID);
+  res.status(statusCode).send(summaryObject);
 });
 
 module.exports = router;

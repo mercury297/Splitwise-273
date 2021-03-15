@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, fn, col } = require('sequelize');
 const { transactions } = require('../models/index');
 
 const getDuesForGroup = async (userID, groupID) => {
@@ -49,7 +49,40 @@ const createTransactionsForExpense = async (transactionArray) => {
   }
 };
 
+const getGroupSummary = async (groupID) => {
+  try {
+    const summaryObject = await transactions.findAll({
+      attributes: ['user_that_owes',
+        [fn('sum', col('amount_owed')), 'total_owed'],
+        'user_that_paid',
+      ],
+      where: {
+        group_id: groupID,
+      },
+      group: ['user_that_owes', 'user_that_paid'],
+      raw: true,
+    });
+    if (summaryObject !== undefined
+      || summaryObject !== null) {
+      return {
+        statusCode: 200,
+        body: summaryObject,
+      };
+    }
+    return {
+      statusCode: 500,
+      body: 'No TXs found',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   getDuesForGroup,
   createTransactionsForExpense,
+  getGroupSummary,
 };

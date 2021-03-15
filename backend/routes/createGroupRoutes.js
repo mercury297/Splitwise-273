@@ -112,9 +112,9 @@ router.post('/sendInvite', async (req, res) => {
   }
 });
 
-router.post('/getGroupUserList', async (req, res) => {
-  const { groupID } = req.body;
-  const getUsersRes = await getGroupUsers(groupID);
+router.get('/getGroupUserList/:groupID', async (req, res) => {
+  // const { groupID } = req.body;
+  const getUsersRes = await getGroupUsers(req.params.groupID);
   if (getUsersRes.statusCode === 200) {
     res.status(200).send({
       groupUsers: getUsersRes.body,
