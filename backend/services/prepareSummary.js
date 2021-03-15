@@ -19,4 +19,20 @@ const summarizer = async (summaryObject, groupID) => {
   return owes;
 };
 
-module.exports = summarizer;
+const dashboardSummarizer = async (summaryObject) => {
+  const summary = { owes: [], owed: [] };
+
+  for (let i = 0; i < summaryObject.length; i += 1) {
+    if (summaryObject.total_owed < 0) {
+      summary.owed.push(summaryObject[i]);
+    } else {
+      summary.owes.push(summaryObject[i]);
+    }
+  }
+  return summary;
+};
+
+module.exports = {
+  summarizer,
+  dashboardSummarizer,
+};

@@ -138,6 +138,7 @@ const acceptInvitation = async (userID, groupID) => {
         where: {
           group_id: groupID,
           user_id: userID,
+          invite_flag: false,
         },
       },
     );
