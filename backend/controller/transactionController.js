@@ -58,6 +58,7 @@ const getGroupSummary = async (groupID) => {
       ],
       where: {
         group_id: groupID,
+        settled_flag: false,
       },
       group: ['user_that_owes', 'user_that_paid'],
       raw: true,
@@ -80,6 +81,10 @@ const getGroupSummary = async (groupID) => {
     };
   }
 };
+
+// const getUserSummary = async (userID) => {
+
+// }
 
 module.exports = {
   getDuesForGroup,

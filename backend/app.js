@@ -38,6 +38,7 @@ app.use('/group/myGroups', require('./routes/myGroupRoutes'));
 app.use('/group/', require('./routes/groupsRoutes'));
 app.use('/recentActivity', require('./routes/recentActivityRoutes'));
 app.use('/expenses', require('./routes/expenseRoutes'));
+app.use('/dashboard', require('./routes/dashboardRoutes'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to chinmay\'s application.' });
