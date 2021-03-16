@@ -109,7 +109,7 @@ router.post('/sendInvite', async (req, res) => {
 
 router.get('/getUsersForGroup/:email', async (req, res) => {
   // const { groupID } = req.body;
-  console.log('hi');
+  // console.log('hi');
   const getUsersRes = await getAllUsersExceptCurrent(req.params.email);
   const { statusCode, body } = getUsersRes;
   res.status(statusCode).send(body);

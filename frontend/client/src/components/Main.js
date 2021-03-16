@@ -11,10 +11,10 @@ class Main extends Component {
   render() {
     return (
       <div>
-        <Route path="/user/login" component={Login} />
-        <Route path="/user/register" component={Register} />
-        <Route path="/user/profile" component={Profile} />
-        <Route path="/" component={LandingPage} />
+        <Route exact path="/user/login" component={Login} />
+        <Route exact path="/user/register" component={Register} />
+        <Route exact path="/user/profile" component={Profile} />
+        <Route exact path="/" component={LandingPage} />
       </div>
     );
   }

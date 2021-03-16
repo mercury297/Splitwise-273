@@ -1,49 +1,36 @@
-.bg-facets {
-    background-size: 1250px;
-    background-position: center 0px;
+.upperlanding{
+    height:110px;
+    width:100%;
+    max-width: 1600px;
+    overflow: visible;
+    z-index: 1;
+    background-color:white;
 }
-
-.bg-facets {
-    background-image: url(http://localhost:3001/facets.png);
-    background-position: center 0px;
-    background-size: 1000px;
-    background-repeat: repeat-x;
+.lowerlanding{
+    background-image: url(https://assets.splitwise.com/assets/core/facets.png);
+    max-width:1600px;
+    position:fixed;
+    top:60px;
+    height:100%;
 }
+#login{
+position:fixed;
+right:100px;
+top:18px;
+color: #5bc5a7;
 
-main {
-    display: block;
 }
-
-#logo {
-    width: 43.55px;
-    height: 48px;
+#signup{
+    position:fixed;
+    right:20px;
+    top:10px;
+    background-color: #5bc5a7;
+    color:white;
 }
-
-#logoBox {
-    width: 140px;
-    height: 48px;
-}
-
-#logoTitle {
-    color: #373b3f;
-    border:0 solid;
-    font-weight:650;
-    font-size: 20px;
-    padding-left: 5px;
-    top: 5px;
-    position: relative;
-}
-
-#signUp {
-    background-color: #1cc29f;
-    color: blanchedalmond;
-    height: 40px;
-    text-decoration: none;
-}
-
-#logIn {
-    position: relative;
-    left: 530px;
-    color:#1cc29f;
-    text-decoration: none;
+.plane{
+    height: 700px;
+    width: 700px;
+    position: fixed;
+    top: 110px;
+    left: 450px;
 }
