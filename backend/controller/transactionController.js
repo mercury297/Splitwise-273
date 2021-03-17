@@ -88,7 +88,7 @@ const getUserSummary = async (userID) => {
     const summaryObject = await transactions.findAll({
       attributes: ['user_that_owes',
         [fn('sum', col('amount_owed')), 'total_owed'],
-        'user_that_paid', 'group_id',
+        'user_that_paid', 'group_id', 'group_name',
       ],
       where: {
         settled_flag: false,

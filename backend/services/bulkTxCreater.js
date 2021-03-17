@@ -17,6 +17,7 @@ const getTransactionsArray = async (groupName, userThatPaid, amount) => {
           user_that_paid: userThatPaid,
           amount_owed: amountDividend.toString(),
           group_id: arrayObject[i].dataValues.group_id,
+          group_name: groupName,
         });
       }
     }

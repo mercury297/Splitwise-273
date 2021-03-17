@@ -19,14 +19,14 @@ const summarizer = async (summaryObject, groupID) => {
   return owes;
 };
 
-const dashboardSummarizer = async (summaryObject) => {
+const dashboardSummarizer = async (summaryObject, currentUser) => {
   const summary = { owes: [], owed: [] };
 
   for (let i = 0; i < summaryObject.length; i += 1) {
-    if (summaryObject.total_owed < 0) {
-      summary.owed.push(summaryObject[i]);
-    } else {
+    if (summaryObject[i].total_owed > 0 && summaryObject[i].user_that_owes === currentUser) {
       summary.owes.push(summaryObject[i]);
+    } else {
+      summary.owed.push(summaryObject[i]);
     }
   }
   return summary;

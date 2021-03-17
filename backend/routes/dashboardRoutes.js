@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/getSummary/:email', async (req, res) => {
   const summaryRes = await getUserSummary(req.params.email);
   const { statusCode, body } = summaryRes;
-  const summary = await dashboardSummarizer(body);
+  const summary = await dashboardSummarizer(body, req.params.email);
   res.status(statusCode).send(summary);
 });
 

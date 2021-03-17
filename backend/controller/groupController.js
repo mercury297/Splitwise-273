@@ -77,8 +77,35 @@ const updateGroup = async (groupID, updateData) => {
   }
 };
 
+const getGroupName = async (groupID) => {
+  try {
+    const groupObject = await groups.find({
+      attributes: ['group_name', 'group_id'],
+      where: {
+        group_id: groupID,
+      },
+    });
+    if (groupObject !== undefined || groupObject !== null) {
+      return {
+        statusCode: 200,
+        body: groupObject,
+      };
+    }
+    return {
+      statusCode: 404,
+      body: 'Group not found',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   createGroup,
   getGroup,
   updateGroup,
+  getGroupName,
 };

@@ -33,6 +33,7 @@ const getUsersByGroupName = async (groupName) => {
       attributes: ['email', 'group_id'],
       where: {
         group_name: groupName,
+        invite_flag: true,
       },
     });
     if (groupObject !== undefined || groupObject !== null) {
