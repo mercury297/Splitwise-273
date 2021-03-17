@@ -17,6 +17,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import '../../styles/dashboard.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
+import { currencyFormatter } from '../../utils/commonUtils';
 
 class DashboardNav extends Component {
   constructor(props) {
@@ -37,21 +38,21 @@ class DashboardNav extends Component {
               <span>Total balance</span>
               <br />
               <span>
-                {this.props.totals.total}
+                {currencyFormatter('USD', this.props.totals.total)}
               </span>
             </Col>
             <Col className="grid">
               <span>You owe</span>
               <br />
               <span>
-                {this.props.totals.owes}
+                {currencyFormatter('USD', this.props.totals.owes)}
               </span>
             </Col>
             <Col className="grid">
               <span>You are owed</span>
               <br />
               <span>
-                {this.props.totals.owed}
+                {currencyFormatter('USD', this.props.totals.owed)}
               </span>
             </Col>
           </Row>
