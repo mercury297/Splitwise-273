@@ -193,7 +193,7 @@ const leaveGroupUser = async (groupID, userID) => {
 const getMyGroups = async (userID) => {
   try {
     const myGroupsObject = await groupUsers.findAll({
-      attributes: ['group_id'],
+      attributes: ['group_id', 'group_name'],
       where: {
         user_id: userID,
         invite_flag: true,

@@ -1,4 +1,6 @@
+const { Op } = require('sequelize');
 const { recentActivity } = require('../models/index');
+const { getMyGroups } = require('./groupUserController');
 
 const createActivity = async (activityBody) => {
   try {
@@ -16,11 +18,17 @@ const createActivity = async (activityBody) => {
   }
 };
 
-const getActivities = async (email) => {
+const getActivities = async (email, userID) => {
   try {
+    const myGroupsObject = await getMyGroups(userID);
+    const groupIDs = myGroupsObject.body.map((myGroup) => myGroup.dataValues.group_name);
+    console.log('groupIDs', groupIDs);
     const recentActivitiesObject = await recentActivity.findAll({
       where: {
         email,
+        group_name: {
+          [Op.in]: groupIDs,
+        },
       },
     });
     console.log(recentActivitiesObject);
