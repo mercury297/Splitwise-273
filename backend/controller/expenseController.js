@@ -42,7 +42,26 @@ const getExpenses = async (groupName) => {
   }
 };
 
+const updateExpense = async (updateData, expenseID) => {
+  try {
+    const expenseObject = await expenses.update(updateData,
+      {
+        where: { expense_id: expenseID },
+      });
+    return {
+      statusCode: 201,
+      body: expenseObject,
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   createExpense,
   getExpenses,
+  updateExpense,
 };

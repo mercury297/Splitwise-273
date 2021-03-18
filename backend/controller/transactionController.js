@@ -156,10 +156,39 @@ const settleUp = async (currentUser, settleUpUser) => {
   }
 };
 
+const updateAllTxs = async (expenseID, updatedAmount) => {
+  try {
+    const updateObject = await transactions.update(
+      { amount_owed: updatedAmount },
+      {
+        where: {
+          expense_id: expenseID,
+        },
+      },
+    );
+    if (updateObject !== undefined || updateObject !== null) {
+      return {
+        statusCode: 200,
+        body: updateObject,
+      };
+    }
+    return {
+      statusCode: 404,
+      body: 'No such TXs exist',
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err,
+    };
+  }
+};
+
 module.exports = {
   getDuesForGroup,
   createTransactionsForExpense,
   getGroupSummary,
   getUserSummary,
   settleUp,
+  updateAllTxs,
 };

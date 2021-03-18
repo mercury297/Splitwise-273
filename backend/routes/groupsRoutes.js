@@ -1,14 +1,15 @@
 const express = require('express');
-const { getExpenses, createExpense } = require('../controller/expenseController');
-const getTransactionsArray = require('../services/bulkTxCreater');
+const { getExpenses, createExpense, updateExpense } = require('../controller/expenseController');
+const { getTransactionsArray, getUpdatedAmount } = require('../services/bulkTxCreater');
 const { summarizer } = require('../services/prepareSummary');
-const { createTransactionsForExpense, getGroupSummary } = require('../controller/transactionController');
+const { createTransactionsForExpense, getGroupSummary, updateAllTxs } = require('../controller/transactionController');
 const { createActivity } = require('../controller/recentActivityController');
 
 const router = express.Router();
 
 router.get('/getExpensesList/:groupName', async (req, res) => {
-  const expenseListRes = getExpenses(req.params.groupName);
+  const expenseListRes = await getExpenses(req.params.groupName);
+  console.log(expenseListRes);
   const { statusCode, body } = expenseListRes;
   res.status(statusCode).send(body);
 });
@@ -27,8 +28,11 @@ router.post('/addExpense', async (req, res) => {
   const expenseBody = await createExpense(req.body);
   // console.log(expenseBody);
   const { statusCode, body } = expenseBody;
+  console.log('exp body:', body);
   if (statusCode === 201) {
-    const txArray = await getTransactionsArray(group_name, paid_by, amount);
+    const txArray = await getTransactionsArray(
+      group_name, paid_by, amount, body.dataValues.expense_id,
+    );
     console.log('txArr:', txArray);
 
     const createTxObject = await createTransactionsForExpense(txArray);
@@ -49,6 +53,32 @@ router.get('/getSummary/:groupID', async (req, res) => {
   const { statusCode, body } = summaryBody;
   const summaryObject = await summarizer(body, req.params.groupID);
   res.status(statusCode).send(summaryObject);
+});
+
+router.put('/updateExpense', async (req, res) => {
+  const {
+    expenseID, amount, groupName, email,
+  } = req.body;
+  const amountAfterDivide = await getUpdatedAmount(amount, groupName);
+  const updateExpenseRes = await updateExpense({
+    amount,
+  }, expenseID);
+
+  if (updateExpenseRes.statusCode === 201) {
+    const updateTxRes = await updateAllTxs(expenseID, amountAfterDivide);
+    const { statusCode, body } = updateTxRes;
+    console.log('update body', body);
+    const activityObject = await createActivity({
+      operation_type: 'UPDATE EXPENSE',
+      email,
+      group_name: groupName,
+    });
+    console.log('activity object :', activityObject.body);
+    res.status(statusCode).send('Updated successfully');
+  } else {
+    console.log(updateExpenseRes.body);
+    res.status(updateExpenseRes.statusCode).send('Failed to update');
+  }
 });
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const { getUsersByGroupName } = require('../controller/groupUserController');
 
-const getTransactionsArray = async (groupName, userThatPaid, amount) => {
+const getTransactionsArray = async (groupName, userThatPaid, amount, expenseID) => {
   console.log('user that paid :', userThatPaid);
   const usersObject = await getUsersByGroupName(groupName);
   // console.log('userObj:', usersObject.body[0].dataValues.email);
@@ -18,6 +18,7 @@ const getTransactionsArray = async (groupName, userThatPaid, amount) => {
           amount_owed: amountDividend.toString(),
           group_id: arrayObject[i].dataValues.group_id,
           group_name: groupName,
+          expense_id: expenseID,
         });
       }
     }
@@ -26,4 +27,13 @@ const getTransactionsArray = async (groupName, userThatPaid, amount) => {
   return usersObject;
 };
 
-module.exports = getTransactionsArray;
+const getUpdatedAmount = async (amount, groupName) => {
+  const usersObject = await getUsersByGroupName(groupName);
+  const amountDividend = amount / usersObject.body.length;
+  return amountDividend;
+};
+
+module.exports = {
+  getTransactionsArray,
+  getUpdatedAmount,
+};
