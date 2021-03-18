@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
-import Profile from './Profle';
+import Profile from './Profile';
 import LandingPage from './LandingPage';
 import Dashboard from './Dashboard/Dashboard';
 

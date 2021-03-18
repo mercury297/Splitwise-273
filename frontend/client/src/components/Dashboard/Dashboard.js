@@ -9,6 +9,7 @@ import _ from 'lodash';
 import DashboardNav from './DashboardNav';
 import Duelist from './DueList';
 import { getTotalBalance, createArrayForDueList, getArrForSelect } from '../../utils/dashboardUtils';
+import SideNavbar from '../Navbar';
 // import { getTotalBalance } from '../../utils/dashboardUtils';
 
 class Dashboard extends Component {
@@ -74,6 +75,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
+        <SideNavbar />
         <DashboardNav
           totals={this.state.navData}
           userList={getArrForSelect(_.union(this.state.data.owesList, this.state.data.owesList))}

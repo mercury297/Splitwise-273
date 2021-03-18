@@ -80,6 +80,7 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
   // console.log(req.body);
   const { file } = req;
   const { ID } = req.body;
+  console.log(req.body);
   const userDetails = await getUser(ID);
   // console.log(userDetails);
   if (userDetails.statusCode === 500 || userDetails.statusCode === 404) {
@@ -102,7 +103,7 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
       const userUpdateRes = await updateUser(ID, { photo_URL: data.Location });
       if (userUpdateRes.statusCode === 200) {
         res.status(200).send({
-          update: userUpdateRes.body,
+          update: data,
         });
       } else {
         res.status(500).send({
@@ -118,7 +119,6 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
 router.post('/updateUserDetails', async (req, res) => {
   const updateDetails = req.body;
   const { userID, updateData } = updateDetails;
-
   const updateRes = await updateUser(userID, updateData);
   if (updateRes.statusCode === 200) {
     res.status(200).send('User updated successfully!');
