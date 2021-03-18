@@ -5,9 +5,10 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import DashboardNav from './DashboardNav';
 import Duelist from './DueList';
-import { getTotalBalance, createArrayForDueList } from '../../utils/dashboardUtils';
+import { getTotalBalance, createArrayForDueList, getArrForSelect } from '../../utils/dashboardUtils';
 // import { getTotalBalance } from '../../utils/dashboardUtils';
 
 class Dashboard extends Component {
@@ -73,7 +74,10 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-        <DashboardNav totals={this.state.navData} />
+        <DashboardNav
+          totals={this.state.navData}
+          userList={getArrForSelect(_.union(this.state.data.owesList, this.state.data.owesList))}
+        />
         <Duelist data={this.state.data} fresh={this.state.dataEval} />
       </div>
     );

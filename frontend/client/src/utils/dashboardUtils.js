@@ -64,7 +64,16 @@ const createArrayForDueList = (dueObject, owed) => {
   };
 };
 
+const getArrForSelect = (list) => {
+  const selectArr = [];
+  for (let i = 0; i < list.length; i += 1) {
+    selectArr.push({ label: list[i], value: list[i] });
+  }
+  return selectArr;
+};
+
 export {
   getTotalBalance,
   createArrayForDueList,
+  getArrForSelect,
 };
