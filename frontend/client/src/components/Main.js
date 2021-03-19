@@ -8,6 +8,7 @@ import Profile from './Profile';
 import LandingPage from './LandingPage';
 import Dashboard from './Dashboard/Dashboard';
 import CreateGroup from './CreateGroup';
+import RecentActivity from './RecentActivity';
 
 class Main extends Component {
   render() {
@@ -19,6 +20,7 @@ class Main extends Component {
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/createGroup" component={CreateGroup} />
+        <Route exact path="/recentActivity" component={RecentActivity} />
       </div>
     );
   }
