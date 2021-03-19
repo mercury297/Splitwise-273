@@ -7,7 +7,7 @@ const upload = multer({ storage });
 const { getParams, s3 } = require('../services/s3Uploader');
 
 const { getGroup, createGroup, updateGroup } = require('../controller/groupController');
-const { createGroupUser } = require('../controller/groupUserController');
+const { createGroupUsers } = require('../controller/groupUserController');
 const { getAllUsersExceptCurrent } = require('../controller/userController');
 const { createActivity } = require('../controller/recentActivityController');
 
@@ -90,14 +90,10 @@ router.post('/addProfilePicture', upload.single('file'), async (req, res) => {
 });
 
 router.post('/sendInvite', async (req, res) => {
-  const inviteDetails = req.body;
-  const {
-    groupID, userID, email, groupName,
-  } = inviteDetails;
-
-  const sendInviteRes = await createGroupUser(groupID, userID, groupName, email);
+  const inviteArray = req.body;
+  const sendInviteRes = await createGroupUsers(inviteArray);
   if (sendInviteRes.statusCode === 201) {
-    res.status(201).send(`Invite sent to user with user_id = ${userID}`);
+    res.status(201).send('Invites sent to all the users');
   } else {
     res.status(500).send({
       errors: {

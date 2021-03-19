@@ -7,6 +7,7 @@ import Register from './Register';
 import Profile from './Profile';
 import LandingPage from './LandingPage';
 import Dashboard from './Dashboard/Dashboard';
+import CreateGroup from './CreateGroup';
 
 class Main extends Component {
   render() {
@@ -17,6 +18,7 @@ class Main extends Component {
         <Route exact path="/user/profile" component={Profile} />
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/createGroup" component={CreateGroup} />
       </div>
     );
   }

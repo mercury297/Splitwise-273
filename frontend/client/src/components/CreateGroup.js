@@ -15,6 +15,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import SideNavbar from './Navbar';
 import getArrayForSelect from '../utils/createGroupUtils';
+import { getCurrentUserData } from '../utils/commonUtils';
 
 class CreateGroup extends Component {
   constructor(props) {
@@ -26,9 +27,8 @@ class CreateGroup extends Component {
   }
 
   handleSelect = (opt) => {
-    let newOpts = this.state.selectedUsers.concat(opt);
-    newOpts = _.uniqBy(newOpts, 'value');
-    console.log('new opt');
+    let newOpts = this.state.selectedUsers.concat({ user_id: opt.value, email: opt.label });
+    newOpts = _.uniqBy(newOpts, 'user_id');
     this.setState({ selectedUsers: newOpts });
   }
 
@@ -41,19 +41,39 @@ class CreateGroup extends Component {
   }
 
   handleSubmit = async (e) => {
+    const curentUser = getCurrentUserData();
+    const selUsers = this.state.selectedUsers;
+    console.log('selected ', selUsers);
     e.preventDefault();
-    const reqForCreate = { name: e.target.groupName.value, created_by: 'A@J.com', userID: '375f5fd0-86fc-11eb-a3b7-9def9c63ff09' };
-    // console.log(reqForCreate);
-    const groupCreateRes = await axios.post('http://localhost:3001/group/createGroup/createGroup', reqForCreate);
-    if (groupCreateRes.status === 201) {
-      const groupName = groupCreateRes.data.group.name;
-      const { groupID } = groupCreateRes.data;
-      const userID = '375f5fd0-86fc-11eb-a3b7-9def9c63ff09';
-      // const selectedUsers = this.state.selectedUsers;
-      // let reqArr = new Array(selectedUsers.length);
-      // s.forEach((user) => {
-
-      // });
+    const reqForCreate = {
+      name: e.target.groupName.value,
+      email: curentUser.email,
+      userID: curentUser.user_id,
+    };
+    try {
+      const groupCreateRes = await axios.post('http://localhost:3001/group/createGroup/createGroup', reqForCreate);
+      if (groupCreateRes.status === 201) {
+        const groupName = groupCreateRes.data.group.name;
+        const { groupID } = groupCreateRes.data.group;
+        const inviteList = [];
+        for (let i = 0; i < selUsers.length; i += 1) {
+          inviteList.push({
+            user_id: selUsers[0].user_id,
+            group_id: groupID,
+            group_name: groupName,
+            email: selUsers[0].email,
+          });
+        }
+        console.log(inviteList);
+        const sendInviteRes = await axios.post('http://localhost:3001/group/createGroup/sendInvite', inviteList);
+        if (sendInviteRes.status === 201) {
+          alert('Group created successfully and Invitations sent!');
+        } else {
+          alert('Group created successfully but could not send Invitations!');
+        }
+      }
+    } catch (err) {
+      alert(err);
     }
   }
 
@@ -80,7 +100,7 @@ class CreateGroup extends Component {
               <Select
                 className="names"
                 options={this.state.userList}
-                onChange={(opt) => this.handleSelect(opt.value)}
+                onChange={(opt) => this.handleSelect(opt)}
               />
             </div>
             <div className=" d-flex flex-row bd-highlight mb-3 fields ">
@@ -88,7 +108,7 @@ class CreateGroup extends Component {
               <Select
                 className="names"
                 options={this.state.userList}
-                onChange={(opt) => this.handleSelect(opt.value)}
+                onChange={(opt) => this.handleSelect(opt)}
               />
             </div>
             <div className=" d-flex flex-row bd-highlight mb-3 fields ">
@@ -96,10 +116,10 @@ class CreateGroup extends Component {
               <Select
                 className="names"
                 options={this.state.userList}
-                onChange={(opt) => this.handleSelect(opt.value)}
+                onChange={(opt) => this.handleSelect(opt)}
               />
             </div>
-            {/* <span><a href="#">+ Add a person</a></span> */}
+            <span><a href="#">+ Add a person</a></span>
             <Button
               type="submit"
               style={{ backgroundColor: '#ff652f', marginLeft: '10px' }}

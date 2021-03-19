@@ -29,12 +29,8 @@ class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const data = {
-      userObject: {
-        // eslint-disable-next-line react/destructuring-assignment
-        email: this.state.email,
-        // eslint-disable-next-line react/destructuring-assignment
-        password: this.state.password,
-      },
+      email: this.state.email,
+      password: this.state.password,
     };
     // eslint-disable-next-line react/destructuring-assignment
     // eslint-disable-next-line react/prop-types

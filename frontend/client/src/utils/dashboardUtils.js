@@ -1,4 +1,4 @@
-import { currencyFormatter } from './commonUtils';
+import { currencyFormatter, getCurrentUserData } from './commonUtils';
 
 const getTotal = (untotalledArray) => {
   const total = untotalledArray.reduce((acc, elem) => acc + elem.total_owed, 0);
@@ -24,6 +24,8 @@ const getTotalBalance = (data) => {
 // user_that_paid: "A@J.com"
 
 const createArrayForDueList = (dueObject, owed) => {
+  const userDetails = getCurrentUserData();
+  const currentCurrency = userDetails.default_currency;
   // console.log(dueObject, owed);
   if (dueObject.length === 0) {
     return [];
@@ -53,9 +55,9 @@ const createArrayForDueList = (dueObject, owed) => {
     }
     IDsListTotals[currentName] += currentUser.total_owed;
     if (owed) {
-      dueList[currentName].push(`${currentName} owes you ${currencyFormatter('USD', currentUser.total_owed)} from group: ${currentUser.group_name}`);
+      dueList[currentName].push(`${currentName} owes you ${currencyFormatter(currentCurrency, currentUser.total_owed)} from group: ${currentUser.group_name}`);
     } else {
-      dueList[currentName].push(`You owe ${currentName} ${currencyFormatter('USD', currentUser.total_owed)} from group: ${currentUser.group_name}`);
+      dueList[currentName].push(`You owe ${currentName} ${currencyFormatter(currentCurrency, currentUser.total_owed)} from group: ${currentUser.group_name}`);
     }
   }
   return {

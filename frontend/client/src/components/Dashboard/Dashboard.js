@@ -4,11 +4,13 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 import axios from 'axios';
 import _ from 'lodash';
 import DashboardNav from './DashboardNav';
 import Duelist from './DueList';
 import { getTotalBalance, createArrayForDueList, getArrForSelect } from '../../utils/dashboardUtils';
+import { getCurrentUserData } from '../../utils/commonUtils';
 import SideNavbar from '../Navbar';
 // import { getTotalBalance } from '../../utils/dashboardUtils';
 
@@ -35,8 +37,10 @@ class Dashboard extends Component {
   }
 
   async componentDidMount() {
+    const currentUser = getCurrentUserData();
+    console.log(currentUser);
     try {
-      const res = await axios.get('http://localhost:3001/dashboard/getSummary/A@J.com');
+      const res = await axios.get(`http://localhost:3001/dashboard/getSummary/${currentUser.email}`);
       console.log(res.data);
       const totalsObject = getTotalBalance(res.data);
       const navData = { ...this.state.navData };
@@ -73,8 +77,14 @@ class Dashboard extends Component {
   }
 
   render() {
+    let redirectVar = null;
+    const userLS = localStorage.getItem('user');
+    if (userLS === null) {
+      redirectVar = <Redirect to="/" />;
+    }
     return (
       <div>
+        {redirectVar}
         <SideNavbar />
         <DashboardNav
           totals={this.state.navData}

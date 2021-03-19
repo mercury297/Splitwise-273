@@ -20,7 +20,7 @@ const unauthDispatcher = (payload) => ({
 });
 
 const loginUser = (payload) => (dispatch) => {
-//   console.log('PL :', payload);
+  console.log('PL :', payload);
   axios.post('http://localhost:3001/user/login', payload)
     .then((res) => {
       if (res.status === 200) {

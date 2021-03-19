@@ -15,7 +15,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import '../../styles/dashboard.css';
-import { currencyFormatter } from '../../utils/commonUtils';
+import { currencyFormatter, getCurrentUserData } from '../../utils/commonUtils';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class DueList extends Component {
@@ -24,6 +24,7 @@ class DueList extends Component {
   }
 
   render() {
+    const currentUser = getCurrentUserData();
     if (this.props.fresh) {
       console.log('yes');
       console.log('state after loading:', this.state);
@@ -51,7 +52,10 @@ class DueList extends Component {
                       <span>
                         You are Owed
                         {' '}
-                        {currencyFormatter('USD', this.props.data.owesTotalsList[elem])}
+                        {
+                        currencyFormatter(currentUser.default_currency,
+                          this.props.data.owesTotalsList[elem])
+                        }
                       </span>
                     </div>
                     <ul className="balance_details">
@@ -80,12 +84,19 @@ class DueList extends Component {
                       <span>
                         You Owe
                         {' '}
-                        {currencyFormatter('USD', this.props.data.owedTotalsList[elem])}
+                        {
+                        currencyFormatter(currentUser.default_currency,
+                          this.props.data.owedTotalsList[elem])
+                        }
                       </span>
                     </div>
                     <ul className="balance_details">
                       <li>
-                        {this.props.data.owed[elem]}
+                        {
+                        currencyFormatter(currentUser.default_currency,
+                          this.props.data.owed[elem])
+                        }
+                        {}
                       </li>
                     </ul>
                   </li>

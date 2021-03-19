@@ -19,7 +19,7 @@ import '../../styles/dashboard.css';
 import '../../styles/groupPage.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Select from 'react-select';
-import { currencyFormatter } from '../../utils/commonUtils';
+import { currencyFormatter, getCurrentUserData } from '../../utils/commonUtils';
 
 class DashboardNav extends Component {
   constructor(props) {
@@ -60,6 +60,8 @@ class DashboardNav extends Component {
 
   render() {
     console.log('props', this.props);
+    const currentUser = getCurrentUserData();
+    console.log(currentUser);
     return (
       <Container className="shadow p-3 mb-5 bg-white rounded" className="justify-content-md-center">
         <Jumbotron className="jumbotron">
@@ -103,21 +105,21 @@ class DashboardNav extends Component {
               <span>Total balance</span>
               <br />
               <span>
-                {currencyFormatter('USD', this.props.totals.total)}
+                {currencyFormatter(currentUser.default_currency, this.props.totals.total)}
               </span>
             </Col>
             <Col className="grid">
               <span>You owe</span>
               <br />
               <span>
-                {currencyFormatter('USD', this.props.totals.owes)}
+                {currencyFormatter(currentUser.default_currency, this.props.totals.owes)}
               </span>
             </Col>
             <Col className="grid">
               <span>You are owed</span>
               <br />
               <span>
-                {currencyFormatter('USD', this.props.totals.owed)}
+                {currencyFormatter(currentUser.default_currency, this.props.totals.owed)}
               </span>
             </Col>
           </Row>

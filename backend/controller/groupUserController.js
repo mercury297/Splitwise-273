@@ -79,14 +79,9 @@ const deleteGroupUsers = async (groupID) => {
   }
 };
 
-const createGroupUser = async (groupID, userID, groupName, email) => {
+const createGroupUsers = async (inviteArray) => {
   try {
-    const createObject = await groupUsers.create({
-      group_id: groupID,
-      user_id: userID,
-      group_name: groupName,
-      email,
-    });
+    const createObject = await groupUsers.bulkCreate(inviteArray);
     if (createObject !== undefined || createObject !== null) {
       return {
         statusCode: 201,
@@ -223,7 +218,7 @@ const getMyGroups = async (userID) => {
 module.exports = {
   getGroupUsers,
   deleteGroupUsers,
-  createGroupUser,
+  createGroupUsers,
   getInvitations,
   acceptInvitation,
   leaveGroupUser,

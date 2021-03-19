@@ -7,19 +7,32 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 import '../App.css';
 import '../styles/profilePage.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import SideNavbar from './Navbar';
+import { getCurrentUserData, updateCurrentUserData } from '../utils/commonUtils';
 
 class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       success: false,
+      currentUser: {},
+      loggedIn: false,
     };
+  }
+
+  componentDidMount = () => {
+    const currentUser = getCurrentUserData();
+    if (currentUser === false) {
+      this.setState({ loggedIn: false });
+    } else {
+      this.setState({ currentUser });
+    }
   }
 
   handleSubmit = async (e) => {
@@ -56,32 +69,49 @@ class Profile extends Component {
         reader.readAsDataURL(photo_URL);
         const bodyParameters = new FormData();
         bodyParameters.append('file', photo_URL);
-        bodyParameters.append('ID', '2d5a8640-86fc-11eb-a3b7-9def9c63ff09');
+        bodyParameters.append('ID', this.state.currentUser.user_id);
         for (const key of bodyParameters.entries()) {
           console.log(`${key[0]}, ${key[1]}`);
         }
         const resPhotoUrl = await axios.post('http://localhost:3001/user/updateProfilePicture', bodyParameters);
         updateData.photo_URL = resPhotoUrl.data.update.Location;
         const res = await axios.post('http://localhost:3001/user/updateUserDetails', {
-          userID: '2d5a8640-86fc-11eb-a3b7-9def9c63ff09',
+          userID: this.state.currentUser.user_id,
           updateData,
         });
         if (res.status === 200 && resPhotoUrl.status === 200) {
+          updateData.user_id = this.state.currentUser.user_id;
+          const newUserData = updateData;
+          console.log(newUserData);
+          updateCurrentUserData(newUserData);
           this.setState({ success: true });
           alert('Profile updated successfully!');
         }
       }
     } catch (err) {
       console.log(err);
+      alert('Could not update profile!');
     }
   }
 
   render() {
+    const currentUser = getCurrentUserData();
+    console.log(localStorage);
+    console.log(currentUser);
+    let redirectVar = null;
+    let currentURL = '';
+    if (currentUser !== false) {
+      currentURL = `https://splitwise-273.s3.us-east-2.amazonaws.com/${currentUser.user_id}`;
+    } else {
+      redirectVar = <Redirect to="/" />;
+    }
+
     return (
       <div>
+        {redirectVar}
         <SideNavbar />
         <div className="content-block-1">
-          <img className="profile_picture" src="https://splitwise-273.s3.us-east-2.amazonaws.com/2d5a8640-86fc-11eb-a3b7-9def9c63ff09" alt="No img" width="200" height="200" />
+          <img className="profile_picture" src={currentURL} alt="No img" width="200" height="200" />
           <form id="new_profile" className="form" method="post" onSubmit={this.handleSubmit}>
             <div id="photo_avatar_upload">
               <input name="photo_URL" type="file" id="profile_picture" onChange={this.onFileChange} />
@@ -89,7 +119,7 @@ class Profile extends Component {
             <div className="input_1">
               <label>Your default currency</label>
               <br />
-              <select name="default_currency" className="form-select" id="currency">
+              <select defaultValue={currentUser.default_currency} name="default_currency" className="form-select" id="currency">
                 <option value="USD">USD </option>
                 <option value="KWD">KWD </option>
                 <option value="BHD">BHD </option>

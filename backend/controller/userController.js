@@ -61,6 +61,7 @@ const getUserByCreds = async (email) => {
       body: 'User not found',
     };
   } catch (err) {
+    console.log(err);
     return {
       statusCode: 500,
       body: err,
