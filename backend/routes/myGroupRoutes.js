@@ -26,11 +26,13 @@ router.post('/acceptInvitation', async (req, res) => {
   }
 });
 
-router.delete('/leaveGroup', async (req, res) => {
+router.post('/leaveGroup', async (req, res) => {
+  console.log(req.body);
   const { groupID } = req.body;
   const { userID } = req.body;
   const getDuesRes = await getDuesForGroup(userID, groupID);
   const { statusCode, body } = getDuesRes;
+  console.log(body);
   if (statusCode === 200 && body.length === 0) {
     const leaveObject = await leaveGroupUser(groupID, userID);
     if (leaveObject.statusCode === 200) {

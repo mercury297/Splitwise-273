@@ -33,7 +33,8 @@ class CreateGroup extends Component {
   }
 
   componentDidMount = async () => {
-    const res = await axios.get('http://localhost:3001/group/createGroup//getUsersForGroup/A@J.com');
+    const curentUser = getCurrentUserData();
+    const res = await axios.get(`http://localhost:3001/group/createGroup//getUsersForGroup/${curentUser.email}`);
     // let userListForOptions = res.data.map((user) => user.email);
     const userListForOptions = getArrayForSelect(res.data);
     // console.log(userListForOptions);
