@@ -52,16 +52,16 @@ class DashboardNav extends Component {
         currentUser: 'A@J.com',
         settleUser: this.state.userSelected,
       });
-      console.log(settleRes);
+      console.log('settle res', settleRes);
     } catch (err) {
       console.log(err);
     }
   }
 
   render() {
-    console.log('props', this.props);
+    // console.log('props', this.props);
     const currentUser = getCurrentUserData();
-    console.log(currentUser);
+    // console.log(currentUser);
     return (
       <Container className="shadow p-3 mb-5 bg-white rounded" className="justify-content-md-center">
         <Jumbotron className="jumbotron">

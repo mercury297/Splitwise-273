@@ -41,7 +41,7 @@ class Dashboard extends Component {
     console.log(currentUser);
     try {
       const res = await axios.get(`http://localhost:3001/dashboard/getSummary/${currentUser.email}`);
-      console.log(res.data);
+      console.log('res', res.data);
       const totalsObject = getTotalBalance(res.data);
       const navData = { ...this.state.navData };
       navData.total = totalsObject.total;
@@ -53,13 +53,14 @@ class Dashboard extends Component {
       const { owes } = res.data;
       if (owes.length > 0) {
         const arrayRes = createArrayForDueList(owes, false);
+        // console.log('array res:', arrayRes);
         dueListObject.owes = arrayRes.dueList;
         totalsDueObject.owes = arrayRes.totals;
       }
       if (owed.length > 0) {
         const arrayRes = createArrayForDueList(owed, true);
-        dueListObject.owes = arrayRes.dueList;
-        totalsDueObject.owes = arrayRes.totals;
+        dueListObject.owed = arrayRes.dueList;
+        totalsDueObject.owed = arrayRes.totals;
       }
       this.setState({ navData });
       const data = { ...this.state.data };
@@ -79,6 +80,7 @@ class Dashboard extends Component {
   render() {
     let redirectVar = null;
     const userLS = localStorage.getItem('user');
+    console.log('data', this.state.data);
     if (userLS === null) {
       redirectVar = <Redirect to="/" />;
     }

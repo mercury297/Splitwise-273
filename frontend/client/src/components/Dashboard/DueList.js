@@ -25,90 +25,8 @@ class DueList extends Component {
 
   render() {
     const currentUser = getCurrentUserData();
-    if (this.props.fresh) {
-      console.log('yes');
-      console.log('state after loading:', this.state);
-      return (
-        <Container className="justify-content-md-center-lower">
-          <Row>
-            <Col><h3 style={{ color: '#999' }}>You Are Owed</h3></Col>
-            <Col><h3 style={{ color: '#999' }}>You Owe</h3></Col>
-          </Row>
-          <div className="row row_1">
-
-            <div className="col" id="uowelist">
-              {this.props.data.owesList.map((elem) => (
-                <ul>
-                  <li className="relationship">
-                    <img src="https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange37-100px.png" className="rounded-circle profilepic" alt="Avatar" />
-                    <div className="name">
-                      <span>
-                        {' '}
-                        {elem}
-                        {' '}
-                      </span>
-                    </div>
-                    <div className="balance_i_owe">
-                      <span>
-                        You are Owed
-                        {' '}
-                        {
-                        currencyFormatter(currentUser.default_currency,
-                          this.props.data.owesTotalsList[elem])
-                        }
-                      </span>
-                    </div>
-                    <ul className="balance_details">
-                      <li>
-                        {this.props.data.owes[elem]}
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              ))}
-            </div>
-
-            <div className="col" id="urowedlist">
-              {this.props.data.owedList.map((elem) => (
-                <ul>
-                  <li className="relationship">
-                    <img src="https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange37-100px.png" className="rounded-circle profilepic" alt="Avatar" />
-                    <div className="name">
-                      <span>
-                        {' '}
-                        {elem}
-                        {' '}
-                      </span>
-                    </div>
-                    <div className="balance_i_owe">
-                      <span>
-                        You Owe
-                        {' '}
-                        {
-                        currencyFormatter(currentUser.default_currency,
-                          this.props.data.owedTotalsList[elem])
-                        }
-                      </span>
-                    </div>
-                    <ul className="balance_details">
-                      <li>
-                        {
-                        currencyFormatter(currentUser.default_currency,
-                          this.props.data.owed[elem])
-                        }
-                        {}
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              ))}
-            </div>
-
-          </div>
-        </Container>
-      );
-    }
-
+    console.log('yes');
+    console.log('state after loading:', this.state);
     return (
       <Container className="justify-content-md-center-lower">
         <Row>
@@ -118,33 +36,65 @@ class DueList extends Component {
         <div className="row row_1">
 
           <div className="col" id="uowelist">
-            <ul>
-              <li className="relationship">
-                <img src="https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange37-100px.png" className="rounded-circle profilepic" alt="Avatar" />
-                <div className="name">
-                  <span>  Chinmay  </span>
-                </div>
-                <div className="balance_i_owe"><span>You Owe</span></div>
-                <ul className="balance_details">
-                  <li>load for each grp</li>
-                </ul>
-              </li>
-            </ul>
+            {this.props.data.owesList.map((elem) => (
+              <ul>
+                <li className="relationship">
+                  <img src="https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange37-100px.png" className="rounded-circle profilepic" alt="Avatar" />
+                  <div className="name">
+                    <span>
+                      {' '}
+                      {elem}
+                      {' '}
+                    </span>
+                  </div>
+                  <div className="balance_i_owe">
+                    <span>
+                      You Owe
+                      {
+                        ` ${currencyFormatter(currentUser.default_currency,
+                          this.props.data.owesTotalsList[elem])}`
+                        }
+                    </span>
+                  </div>
+                  <ul className="balance_details">
+                    <li>
+                      {this.props.data.owes[elem]}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            ))}
           </div>
 
           <div className="col" id="urowedlist">
-            <ul>
-              <li className="relationship">
-                <img src="https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange37-100px.png" className="rounded-circle profilepic" alt="Avatar" />
-                <div className="name">
-                  <span>  Chinmay  </span>
-                </div>
-                <div className="balance_r_owed"><span>You Owe</span></div>
-                <ul className="balance_details">
-                  <li>load for each grp</li>
-                </ul>
-              </li>
-            </ul>
+            {this.props.data.owedList.map((elem) => (
+              <ul>
+                <li className="relationship">
+                  <img src="https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange37-100px.png" className="rounded-circle profilepic" alt="Avatar" />
+                  <div className="name">
+                    <span>
+                      {' '}
+                      {elem}
+                      {' '}
+                    </span>
+                  </div>
+                  <div className="balance_i_owe">
+                    <span>
+                      You Are Owed
+                      {' '}
+                      {` ${
+                        currencyFormatter(currentUser.default_currency,
+                          this.props.data.owedTotalsList[elem])}`}
+                    </span>
+                  </div>
+                  <ul className="balance_details">
+                    <li>
+                      {this.props.data.owed[elem]}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            ))}
           </div>
 
         </div>

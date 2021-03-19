@@ -41,6 +41,7 @@ const loginUser = (payload) => (dispatch) => {
 };
 
 const registerUser = (payload) => (dispatch) => {
+  console.log(payload);
   axios.post('http://localhost:3001/user/register', payload)
     .then((res) => {
       if (res.status === 201) {

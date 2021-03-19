@@ -36,12 +36,12 @@ class MyGroups extends Component {
     return (
       <div>
         <SideNavbar />
-        <Container className="justify-content-md-center-lower lowerrectangle" style={{ height: 'inherit' }}>
+        <Container className="justify-content-md-center-lower lowerrectangle">
           <MyGroupsTable myGroups={this.state.myGroups} />
         </Container>
         <br />
         <br />
-        <Container className="justify-content-md-center-lower lowerrectangle" style={{ height: 'inherit' }}>
+        <Container className="justify-content-md-center-lower lowerrectangle">
           <InvitationsTable myInvites={this.state.myInvites} />
         </Container>
       </div>

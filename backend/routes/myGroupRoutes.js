@@ -32,8 +32,9 @@ router.post('/leaveGroup', async (req, res) => {
   const { userID } = req.body;
   const getDuesRes = await getDuesForGroup(userID, groupID);
   const { statusCode, body } = getDuesRes;
+  console.log(getDuesRes);
   console.log(body);
-  if (statusCode === 200 && body.length === 0) {
+  if (statusCode === 200 && body.length !== 0) {
     const leaveObject = await leaveGroupUser(groupID, userID);
     if (leaveObject.statusCode === 200) {
       res.status(statusCode).send('user left group');
