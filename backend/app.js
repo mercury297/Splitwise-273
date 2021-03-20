@@ -5,6 +5,7 @@ const morgan = require('morgan');
 
 const app = express();
 const bp = require('body-parser');
+const cors = require('cors');
 
 // eslint-disable-next-line no-unused-vars
 const dotenv = require('dotenv');
@@ -18,6 +19,8 @@ app.use(bp.urlencoded({
   extended: true,
 }));
 app.use(morgan('dev'));
+
+app.use(cors());
 
 // eslint-disable-next-line consistent-return
 app.use((req, res, next) => {
@@ -46,3 +49,4 @@ app.get('/', (req, res) => {
 const port = process.env.PORT;
 // || 3001;
 app.listen(port, () => console.log(`listening on port ${port}`));
+module.exports = app;

@@ -13,6 +13,11 @@ const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
   dialectOptions: {
     ssl: 'Amazon RDS',
   },
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000,
+  },
 });
 
 const groups = sequelize.define(

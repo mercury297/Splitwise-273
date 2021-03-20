@@ -118,8 +118,7 @@ router.post('/updateProfilePicture', upload.single('file'), async (req, res) => 
 });
 
 router.post('/updateUserDetails', async (req, res) => {
-  const updateDetails = req.body;
-  const { userID, updateData } = updateDetails;
+  const { userID, updateData } = req.body;
   const updateRes = await updateUser(userID, updateData);
   if (updateRes.statusCode === 200) {
     res.status(200).send('User updated successfully!');
@@ -130,6 +129,10 @@ router.post('/updateUserDetails', async (req, res) => {
       },
     });
   }
+});
+
+router.get('/pingServer', (req, res) => {
+  res.status(200).send('Ping to Splitwise API succesful');
 });
 
 module.exports = router;
