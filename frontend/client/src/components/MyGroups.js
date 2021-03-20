@@ -18,6 +18,8 @@ class MyGroups extends Component {
     this.state = {
       myGroups: [],
       myInvites: [],
+      noGroup: false,
+      noInvites: false,
     };
   }
 
@@ -25,25 +27,62 @@ class MyGroups extends Component {
     const currentUser = getCurrentUserData();
     // eslint-disable-next-line camelcase
     const { user_id } = currentUser;
-    const getGroupsRes = await axios.get(`http://localhost:3001/group/myGroups/getMyGroups/${user_id}`);
-    const invitationsRes = await axios.get(`http://localhost:3001/group/myGroups/getInvitationList/${user_id}`);
-    console.log('invite res ', invitationsRes);
-    this.setState({ myGroups: getGroupsRes.data.myGroups });
-    this.setState({ myInvites: invitationsRes.data });
+    try {
+      const getGroupsRes = await axios.get(`http://localhost:3001/group/myGroups/getMyGroups/${user_id}`);
+      // console.log('invite res ', invitationsRes);
+      this.setState({ myGroups: getGroupsRes.data.myGroups });
+    } catch (err) {
+      // alert(err.response.data.myGroups);
+      this.setState({ noGroup: true });
+    }
+    try {
+      const invitationsRes = await axios.get(`http://localhost:3001/group/myGroups/getInvitationList/${user_id}`);
+      console.log(invitationsRes);
+      this.setState({ myInvites: invitationsRes.data });
+    } catch (err) {
+      this.setState({ noInvites: true });
+    }
   }
 
   render() {
+    let noGroup = null;
+    const noInvite = null;
+    if (this.state.noGroup) {
+      noGroup = <span> Not part of any group yet </span>;
+    }
+    if (this.state.noInvites) {
+      noGroup = <span> Not Invitations also! </span>;
+    }
     return (
       <div>
         <SideNavbar />
-        <Container className="justify-content-md-center-lower lowerrectangle">
-          <MyGroupsTable myGroups={this.state.myGroups} />
-        </Container>
+        {this.state.noGroup
+          ? (
+            <Container className="justify-content-md-center-lower lowerrectangle">
+              {noGroup}
+            </Container>
+          ) : (
+            <div>
+              <Container className="justify-content-md-center-lower lowerrectangle">
+                <MyGroupsTable myGroups={this.state.myGroups} />
+              </Container>
+            </div>
+          )}
         <br />
         <br />
-        <Container className="justify-content-md-center-lower lowerrectangle">
-          <InvitationsTable myInvites={this.state.myInvites} />
-        </Container>
+        {this.state.noInvites
+          ? (
+            <Container className="justify-content-md-center-lower lowerrectangle">
+              {noInvite}
+            </Container>
+          ) : (
+            <div>
+              <Container className="justify-content-md-center-lower lowerrectangle">
+                <InvitationsTable myInvites={this.state.myInvites} />
+              </Container>
+            </div>
+          )}
+
       </div>
     );
   }

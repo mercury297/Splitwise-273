@@ -20,7 +20,6 @@ router.post('/addExpense', async (req, res) => {
     paid_by,
     amount,
     // eslint-disable-next-line camelcase
-    expense_added_by,
     // eslint-disable-next-line camelcase
     group_name,
   } = req.body;
@@ -38,7 +37,7 @@ router.post('/addExpense', async (req, res) => {
     const createTxObject = await createTransactionsForExpense(txArray);
     const activityObject = await createActivity({
       operation_type: 'ADD EXPENSE',
-      email: expense_added_by,
+      email: paid_by,
       group_name,
     });
     console.log('Activity added :', activityObject);

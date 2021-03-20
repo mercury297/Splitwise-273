@@ -47,12 +47,14 @@ class DashboardNav extends Component {
   }
 
   settleUp = async () => {
+    const currentUser = getCurrentUserData();
     try {
       const settleRes = await axios.post('http://localhost:3001/dashboard/settleUp', {
-        currentUser: 'A@J.com',
+        currentUser: currentUser.email,
         settleUser: this.state.userSelected,
       });
       console.log('settle res', settleRes);
+      alert('Settle up successful');
     } catch (err) {
       console.log(err);
     }

@@ -1,12 +1,12 @@
 const { Op, fn, col } = require('sequelize');
 const { transactions } = require('../models/index');
 
-const getDuesForGroup = async (userID, groupID) => {
+const getDuesForGroup = async (email, groupID) => {
   try {
     const duesObject = await transactions.findAll({
       where: {
         [Op.and]: [{ group_id: groupID }, { settled_flag: false }],
-        [Op.or]: [{ user_that_paid: userID }, { user_that_owes: userID }],
+        [Op.or]: [{ user_that_paid: email }, { user_that_owes: email }],
       },
     });
     if (duesObject !== undefined || duesObject !== null) {
@@ -117,6 +117,7 @@ const getUserSummary = async (userID) => {
 };
 
 const settleUp = async (currentUser, settleUpUser) => {
+  console.log(currentUser, settleUpUser, 'settle contr');
   try {
     const settleObjectOwed = await transactions.update(
       { settled_flag: true },

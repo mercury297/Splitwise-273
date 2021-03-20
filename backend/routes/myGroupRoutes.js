@@ -9,6 +9,7 @@ const router = express.Router();
 router.get('/getInvitationList/:userID', async (req, res) => {
   const invitationListRes = await getInvitations(req.params.userID);
   const { statusCode, body } = invitationListRes;
+  console.log(body.length);
   res.status(statusCode).send(body);
 });
 
@@ -29,12 +30,13 @@ router.post('/acceptInvitation', async (req, res) => {
 router.post('/leaveGroup', async (req, res) => {
   console.log(req.body);
   const { groupID } = req.body;
+  const { email } = req.body;
   const { userID } = req.body;
-  const getDuesRes = await getDuesForGroup(userID, groupID);
+  const getDuesRes = await getDuesForGroup(email, groupID);
   const { statusCode, body } = getDuesRes;
-  console.log(getDuesRes);
+  // console.log(getDuesRes);
   console.log(body);
-  if (statusCode === 200 && body.length !== 0) {
+  if (statusCode === 200 && body.length === 0) {
     const leaveObject = await leaveGroupUser(groupID, userID);
     if (leaveObject.statusCode === 200) {
       res.status(statusCode).send('user left group');
@@ -42,7 +44,7 @@ router.post('/leaveGroup', async (req, res) => {
       res.status(500).send(leaveObject.body);
     }
   } else {
-    res.send(body);
+    res.status(500).send('Dues in left group');
   }
 });
 

@@ -33,7 +33,7 @@ const authReducer = (state = initState, action) => {
     }
     case REGISTER: {
       console.log('inside register reducer', action.payload);
-      localStorage.setItem('user', 'logged in');
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
       return {
         authUser: true,
       };

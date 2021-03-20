@@ -91,6 +91,7 @@ router.post('/addProfilePicture', upload.single('file'), async (req, res) => {
 
 router.post('/sendInvite', async (req, res) => {
   const inviteArray = req.body;
+  console.log('invite arr: ', inviteArray);
   const sendInviteRes = await createGroupUsers(inviteArray);
   if (sendInviteRes.statusCode === 201) {
     res.status(201).send('Invites sent to all the users');

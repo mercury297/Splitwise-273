@@ -78,6 +78,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    console.log('user list', this.state.data.owesList, this.state.data.owesList);
     let redirectVar = null;
     const userLS = localStorage.getItem('user');
     console.log('data', this.state.data);
@@ -90,7 +91,7 @@ class Dashboard extends Component {
         <SideNavbar />
         <DashboardNav
           totals={this.state.navData}
-          userList={getArrForSelect(_.union(this.state.data.owesList, this.state.data.owesList))}
+          userList={getArrForSelect(_.union(this.state.data.owesList, this.state.data.owedList))}
         />
         <Duelist data={this.state.data} fresh={this.state.dataEval} />
       </div>

@@ -5,7 +5,7 @@ const getSummaryArr = (summaryObject) => {
     if (summaryObject[key] > 0) {
       arr.push(`${key} owes ${summaryObject[key]}`);
     } else if (summaryObject[key] < 0) {
-      arr.push(`${key} gets back ${summaryObject[key]}`);
+      arr.push(`${key} gets back ${summaryObject[key] * -1}`);
     } else {
       arr.push(`${key} is settled`);
     }

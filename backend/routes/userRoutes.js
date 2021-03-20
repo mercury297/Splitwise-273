@@ -23,6 +23,7 @@ router.post('/register', async (req, res) => {
       user: {
         email: createRes.body.dataValues.email,
         name: createRes.body.dataValues.name,
+        user_id: createRes.body.dataValues.user_id,
       },
     });
   } else {

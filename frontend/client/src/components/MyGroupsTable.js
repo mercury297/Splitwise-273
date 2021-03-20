@@ -18,10 +18,10 @@ class MyGroupsTable extends Component {
 
     handleClick = async (groupID, groupName) => {
       const currentUser = getCurrentUserData();
-      const reqBody = { groupID, userID: currentUser.user_id };
+      const reqBody = { groupID, email: currentUser.email, user_id: currentUser.user_id };
       try {
         const leaveGroupRes = await axios.post('http://localhost:3001/group/myGroups/leaveGroup', reqBody);
-        console.log(leaveGroupRes);
+        console.log('leave res', leaveGroupRes);
         if (leaveGroupRes.status === 200) {
           alert(`Group ${groupName} left successfully`);
         } else {
@@ -29,6 +29,7 @@ class MyGroupsTable extends Component {
         }
       } catch (err) {
         console.log(err);
+        alert('Please clear dues for this group');
       }
     }
 

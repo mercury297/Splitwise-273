@@ -59,13 +59,13 @@ class CreateGroup extends Component {
         const inviteList = [];
         for (let i = 0; i < selUsers.length; i += 1) {
           inviteList.push({
-            user_id: selUsers[0].user_id,
+            user_id: selUsers[i].user_id,
             group_id: groupID,
             group_name: groupName,
-            email: selUsers[0].email,
+            email: selUsers[i].email,
           });
         }
-        console.log(inviteList);
+        console.log('invite list ', inviteList);
         const sendInviteRes = await axios.post('http://localhost:3001/group/createGroup/sendInvite', inviteList);
         if (sendInviteRes.status === 201) {
           alert('Group created successfully and Invitations sent!');

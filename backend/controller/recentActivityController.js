@@ -18,14 +18,13 @@ const createActivity = async (activityBody) => {
   }
 };
 
-const getActivities = async (email, userID) => {
+const getActivities = async (userID) => {
   try {
     const myGroupsObject = await getMyGroups(userID);
     const groupIDs = myGroupsObject.body.map((myGroup) => myGroup.dataValues.group_name);
     console.log('groupIDs', groupIDs);
     const recentActivitiesObject = await recentActivity.findAll({
       where: {
-        email,
         group_name: {
           [Op.in]: groupIDs,
         },
