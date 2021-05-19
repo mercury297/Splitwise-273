@@ -55,6 +55,17 @@ class Register extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
+        <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter name"
+              onChange={(e) => {
+                this.setState({ name: e.target.value });
+              }}
+            />
+          </div>
           <div className="form-group">
             <label>Email address</label>
             <input
@@ -78,17 +89,7 @@ class Register extends Component {
               }}
             />
           </div>
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter name"
-              onChange={(e) => {
-                this.setState({ name: e.target.value });
-              }}
-            />
-          </div>
+
           <div className="form-group">
             <Link to="/user/login"> Already registered? </Link>
           </div>

@@ -4,3 +4,5 @@
 /public
 /uploads
 /.env
+/config
+package-lock.json
