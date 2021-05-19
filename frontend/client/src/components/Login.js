@@ -6,8 +6,9 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
-import { connect } from 'react-redux';
-import { loginUser } from '../redux/actions/authAction';
+import { graphql, withApollo } from 'react-apollo';
+import { findUserQuery } from '../queries/queries';
+
 
 class Login extends Component {
   constructor(props) {
@@ -15,32 +16,45 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      authFlag: false,
+      authUser: false,
     };
   }
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
     this.setState({
-      authFlag: false,
+      authUser: false,
     });
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {
-      email: this.state.email,
-      password: this.state.password,
-    };
-    // eslint-disable-next-line react/destructuring-assignment
-    // eslint-disable-next-line react/prop-types
-    this.props.loginUser(data);
+    // const data = {
+    //   email: this.state.email,
+    //   password: this.state.password,
+    // };
+    const email = this.state.email;
+    // console.log(this.state.email);
+    // console.log(this.props.data);
+    
+    const { data } = await this.props.client.query({
+      query: findUserQuery,
+      variables: { email: this.state.email},
+      fetchPolicy: "no-cache",
+    });
+    const user = data.user
+    console.log(user)
+    if(user.email){
+      this.setState({ authUser: true });
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+    localStorage.setItem('user', JSON.stringify(user));
   };
 
   render() {
-    if (this.props.authUser) {
-      return <Redirect to="/user/profile" />;
-    }
+    // if (this.state.authUser) {
+    //   return <Redirect to="/user/profile" />;
+    // }
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -78,12 +92,13 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  authUser: state.auth.authUser,
-});
+// const mapStateToProps = (state) => ({
+//   authUser: state.auth.authUser,
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  loginUser: (payload) => dispatch(loginUser(payload)),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   loginUser: (payload) => dispatch(loginUser(payload)),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// export default Login;
+export default withApollo(Login);

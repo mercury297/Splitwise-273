@@ -5,8 +5,8 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { registerUser } from '../redux/actions/authAction';
+import { graphql } from 'react-apollo';
+import { addUserMutation } from '../mutation/mutation';
 
 class Register extends Component {
   constructor(props) {
@@ -21,23 +21,35 @@ class Register extends Component {
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
     this.setState({
-      authFlag: false,
+      authUser: false,
     });
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
-      email: this.state.email,
-      password: this.state.password,
-      name: this.state.name,
-    };
-    this.props.registerUser(data);
+    // const data = {
+    //   email: this.state.email,
+    //   password: this.state.password,
+    //   name: this.state.name,
+    // };
+    let mutationResponse = await this.props.addUserMutation({
+      variables: {
+        email: this.state.email,
+        password: this.state.password,
+        name: this.state.name,
+    }
+    });
+    console.log(mutationResponse);
+    const user = mutationResponse.data.addUser;
+    if(user.email){
+      this.setState({ authUser: true });
+      localStorage.setItem('user', JSON.stringify(user));
+    }
   };
 
   render() {
-    if (this.props.authUser) {
+    if (this.state.authUser) {
       return <Redirect to="/user/profile" />;
     }
     return (
@@ -87,12 +99,13 @@ class Register extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  authUser: state.auth.authUser,
-});
+// const mapStateToProps = (state) => ({
+//   authUser: state.auth.authUser,
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  registerUser: (payload) => dispatch(registerUser(payload)),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   registerUser: (payload) => dispatch(registerUser(payload)),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+// export default Register;
+export default graphql(addUserMutation, { name: "addUserMutation" })(Register);

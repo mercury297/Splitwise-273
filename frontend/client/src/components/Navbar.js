@@ -5,8 +5,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { connect } from 'react-redux';
-import { logoutDispatcher } from '../redux/actions/authAction';
 import '../App.css';
 import '../styles/commonPage.css';
 
@@ -46,10 +44,6 @@ class SideNavbar extends Component {
         <button
           type="button"
           className="btn btn-primary"
-          onClick={() => {
-            this.props.logoutDispatcher();
-            this.setState({ authFlag: false });
-          }}
         >
           Logout
         </button>
@@ -60,12 +54,12 @@ class SideNavbar extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  authUser: state.auth.authUser,
-});
+// const mapStateToProps = (state) => ({
+//   authUser: state.auth.authUser,
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  logoutDispatcher: () => dispatch(logoutDispatcher()),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   logoutDispatcher: () => dispatch(logoutDispatcher()),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideNavbar);
+export default SideNavbar;

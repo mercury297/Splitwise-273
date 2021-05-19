@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const bcrypt = require('bcrypt');
 const {
     GraphQLObjectType,
     GraphQLString,
@@ -34,14 +35,20 @@ const RootQuery = new GraphQLObjectType({
             args: { 
                 // name: { type: GraphQLString }, 
                 email: { type: GraphQLString }, 
-                // password: { type: GraphQLString } 
+                password: { type: GraphQLString } 
             },
             async resolve(parent, args) {
                 console.log("resolving");
                 let userRes = await getUserByCreds(args.email);
-                console.log(userRes);
-                return userRes.body;
-                },
+                    userRes.body;
+                    const match = await bcrypt.compare(args.password, userRes.body.password);
+                    console.log(match);
+                    if(match){
+                        return userRes.body;
+                    } else{
+                        return 'Wrong password';
+                    }
+            },
         }
     }
 });
