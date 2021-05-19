@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 const { Op } = require('sequelize');
-const { users } = require('../models/index');
+const { users } = require('../models/user');
 
 // eslint-disable-next-line consistent-return
 const createUser = async (name, email, password) => {

@@ -2,6 +2,8 @@
 
 const express = require('express');
 const morgan = require('morgan');
+const { graphqlHTTP } = require('express-graphql');
+const schema = require('./schema/schema');
 
 const app = express();
 const bp = require('body-parser');
@@ -33,20 +35,25 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static('public'));
-console.log('env baby:', process.env.SEQUELIZE_SYNC_FORCE);
-app.use('/user', require('./routes/userRoutes'));
-app.use('/group/createGroup', require('./routes/createGroupRoutes'));
-app.use('/group/myGroups', require('./routes/myGroupRoutes'));
-app.use('/group/', require('./routes/groupsRoutes'));
-app.use('/recentActivity', require('./routes/recentActivityRoutes'));
-app.use('/dashboard', require('./routes/dashboardRoutes'));
+// app.use(express.static('public'));
+// console.log('env baby:', process.env.SEQUELIZE_SYNC_FORCE);
+// app.use('/user', require('./routes/userRoutes'));
+// app.use('/group/createGroup', require('./routes/createGroupRoutes'));
+// app.use('/group/myGroups', require('./routes/myGroupRoutes'));
+// app.use('/group/', require('./routes/groupsRoutes'));
+// app.use('/recentActivity', require('./routes/recentActivityRoutes'));
+// app.use('/dashboard', require('./routes/dashboardRoutes'));
+
+app.use("/graphql",graphqlHTTP({
+  schema,
+  graphiql: true
+}));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to chinmay\'s application.' });
 });
 
-const port = process.env.PORT;
+const port = 3001;
 // || 3001;
 app.listen(port, () => console.log(`listening on port ${port}`));
 module.exports = app;

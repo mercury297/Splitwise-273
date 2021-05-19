@@ -1,9 +1,10 @@
 const Sequelize = require('sequelize');
+const { dbCreds, SEQUELIZE_SYNC_FORCE } = require('../config/db.config');
 
 const DT = Sequelize.DataTypes;
 
-const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
-  host: process.env.DB_URI,
+const sequelize = new Sequelize(dbCreds.dbName, 'root', dbCreds.dbPassword, {
+  host: dbCreds.host,
   port: 3306,
   // eslint-disable-next-line no-console
   logging: console.log,
@@ -42,14 +43,14 @@ const recentActivity = sequelize.define(
   },
 );
 
-if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
+if (SEQUELIZE_SYNC_FORCE === 'true') {
   sequelize.sync(
     {
       force: true,
     },
   )
     .then(() => {
-      console.log('recent activity db created');
+      console.log('expense db created');
     })
     .catch((err) => {
       console.log(err.sql);

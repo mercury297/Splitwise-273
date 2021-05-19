@@ -8,9 +8,10 @@ const { users } = require('./user');
 const { transactions } = require('./transaction');
 const { expenses } = require('./expenses');
 const { recentActivity } = require('./recentActivity');
+const { dbCreds, SEQUELIZE_SYNC_FORCE } = require('../config/db.config');
 
-const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
-  host: process.env.DB_URI,
+const sequelize = new Sequelize(dbCreds.dbName, 'root', dbCreds.dbPassword, {
+  host: dbCreds.host,
   port: 3306,
   // eslint-disable-next-line no-console
   logging: console.log,
@@ -24,6 +25,7 @@ const sequelize = new Sequelize('splitdb', 'root', process.env.DB_PASSWORD, {
     min: 0,
     idle: 10000,
   },
+  freezeTableName: true
 });
 
 // const sequelize = new Sequelize('splitwise-db.cxahoocsb1cn.us-east-2.rds.amazonaws.com');
@@ -37,7 +39,7 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-if (process.env.SEQUELIZE_SYNC_FORCE === 'true') {
+if (SEQUELIZE_SYNC_FORCE === true) {
   sequelize.sync(
     {
       force: true,
